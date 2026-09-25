@@ -22,4 +22,4 @@ Modelo: [prd-template.md](prd-template.md). Glossário de referência: [PRD — 
 - Requisito técnico respeita o CYD clássico desta fase.
 - SEO não foi ignorado em silêncio: ou aplica e tem validação, ou não aplica e está escrito.
 
-Contexto: [vision.md](vision.md).
+Contexto: [vision.md](vision.md). Ordem das fatias: [roadmap.md](roadmap.md). Fila: [backlog.md](backlog.md).
