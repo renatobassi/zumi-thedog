@@ -1,0 +1,16 @@
+---
+description: Atualizar a main e trabalhar em branch; reconciliar antes do PR
+alwaysApply: true
+---
+
+# Git
+
+Não edite na `main`. Antes de qualquer mudança de arquivo:
+
+1. `git fetch origin`
+2. `git checkout main` e `git pull --ff-only origin main`
+3. `git checkout -b <tipo>/<slug>` (`feat`, `fix`, `docs`, `chore`)
+
+Antes de abrir ou atualizar um pull request para a `main`, busque de novo e incorpore `origin/main`. Rebase se a branch ainda não foi publicada; merge se já foi. Resolva conflitos no conteúdo. Não faça push direto na `main` e não use force push sem pedido explícito.
+
+Detalhe: `docs/engineering/workflow.md`.
