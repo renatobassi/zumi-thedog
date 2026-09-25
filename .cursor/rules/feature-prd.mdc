@@ -1,0 +1,16 @@
+---
+description: Toda feature nova exige PRD crítico aprovado antes do código
+alwaysApply: true
+---
+
+# PRD antes do código
+
+Feature nova começa por `docs/product/prds/`, copiando `docs/product/prd-template.md` (estrutura de PRD da PM3: propósito, casos de uso, requisitos, KPI, liberação).
+
+O PRD só libera implementação com status `aprovado`. A seção Crítica é obrigatória: problema real versus desejo, corte menor, limite do CYD clássico, premissa sem prova, e decisão `seguir`, `encolher`, `adiar` ou `matar`.
+
+Product SEO (`docs/product/product-seo.md`) entra quando a entrega muda página pública. Firmware só da placa marca `não se aplica` no PRD.
+
+Não escreva firmware, arte de jogo nem configuração de placa para uma ideia ainda em `rascunho` ou `em crítica`. Um PRD por branch.
+
+Contexto: `docs/product/vision.md`.

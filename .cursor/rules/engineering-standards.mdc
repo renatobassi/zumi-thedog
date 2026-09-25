@@ -1,0 +1,16 @@
+---
+description: Camadas do firmware e barra mínima de código
+alwaysApply: true
+---
+
+# Código
+
+Quando houver firmware, siga `docs/engineering/architecture.md`.
+
+- PlatformIO, com pinos e libs no repositório.
+- Domínio do Zumi sem display, GPIO ou rede.
+- UI não decide regra de jogo. HAL é o único lugar de pino e driver.
+- Regra de barra, fase e game over testável no computador.
+- Sem API, voz ou microfone até um PRD aprovado pedir isso.
+
+Pronto para a `main` só se `docs/engineering/definition-of-done.md` estiver satisfeito.
