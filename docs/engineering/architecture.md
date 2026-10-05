@@ -25,7 +25,7 @@ main.cpp
 - `domain` não inclui display, GPIO, Wi-Fi nem driver.
 - `ui` não decide se o Zumi adoece.
 - `persistence` não aplica regra de jogo.
-- `hal` é o único lugar com número de pino e, no futuro, com TFT_eSPI.
+- `hal` é o único lugar com número de pino e com TFT_eSPI. A configuração da tela que o TFT_eSPI lê fica nos `build_flags` do `platformio.ini` e é conferida contra `hal/cyd_pins.hpp` na compilação.
 - `main.cpp` só liga os módulos.
 
 Regra de jogo entra no `domain` com PRD aprovado e teste que roda no computador, sem gravar a placa. O alvo `native` do PlatformIO existe para isso. O alvo `cyd` existe para o firmware da placa e ainda não desenha o pet.
@@ -37,8 +37,8 @@ firmware/
   platformio.ini
   src/main.cpp
   src/domain/      contrato do estado (PetSnapshot)
-  src/ui/          interface da tela, sem regra
-  src/hal/         pinos do CYD e contrato de display/touch
+  src/ui/          interface da tela, sem regra (hello.cpp: tela do PRD 0000)
+  src/hal/         pinos do CYD, contrato de display/touch e driver TFT_eSPI
   src/persistence/ contrato de gravar o snapshot
   test/            testes do domínio no ambiente nativo
 ```

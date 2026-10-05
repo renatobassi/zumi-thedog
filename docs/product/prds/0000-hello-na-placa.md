@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-05 |
 
 ## 1. Propósito e escopo
 
@@ -78,7 +78,9 @@ Caminho de falha: sem porta, trocar o cabo e conferir o driver. Com porta e sem 
 
 - [ ] Os casos de uso da seção 5 passam.
 - [ ] O KPI da seção 8 foi observado do jeito descrito, na placa.
-- [ ] Product SEO está `não se aplica`.
+- [x] Product SEO está `não se aplica`.
+
+Em 2026-10-05 a gravação pelo repositório terminou no CYD e a tela mostrou o cumprimento, sem pet (casos 1, 2 e 5). Cabo só de energia (caso 3) e BOOT (caso 4) não foram exercitados nesta placa.
 
 ## 11. Product SEO
 
@@ -115,3 +117,4 @@ Ciclo de cuidado, persistência, sprite, toque, fase, doença, humor.
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Primeiro marco: placa reconhecida e cumprimento na tela. |
+| 0.2 | Aprovado com a decisão `seguir`. Passos da placa em `firmware/README.md`. Hello visto na placa. |
