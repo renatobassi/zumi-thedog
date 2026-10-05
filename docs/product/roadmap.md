@@ -4,7 +4,7 @@ O Zumi da descoberta é um cachorro caramelo que vive na placa. Este mapa ordena
 
 A descoberta está no [chat compartilhado](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667). A [visão](vision.md) já recusou voz, microfone, alto-falante, ESP32-S3, aplicativo e rede. O chat não substitui estes PRDs.
 
-Nenhum PRD está `aprovado`. A crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
+Só o [Hello na placa](prds/0000-hello-na-placa.md) está `aprovado`. Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
 
 ## Agora — o bichinho na mesa
 

@@ -6,7 +6,7 @@ Hoje todos estão `em crítica`. A coluna Decisão é a recomendação da seçã
 
 | Ordem | PRD | Entrega | Depende de | Decisão | Código |
 |---|---|---|---|---|---|
-| 1 | [0000](prds/0000-hello-na-placa.md) | Placa reconhecida e Hello na tela | — | seguir | espera aprovação |
+| 1 | [0000](prds/0000-hello-na-placa.md) | Placa reconhecida e Hello na tela | — | seguir | aprovado, em `feat/hello-na-placa` |
 | 2 | [0001](prds/0001-ciclo-de-cuidado.md) | Barras, sono e ações no tempo ligado | — | seguir | espera aprovação |
 | 3 | [0002](prds/0002-estado-na-placa.md) | O ciclo sobrevive a desligar | 0001 | seguir | espera aprovação |
 | 4 | [0003](prds/0003-zumi-na-tela.md) | Zumi e barras na tela 320×240 | 0000, 0001, sprites no repo | encolher | espera arte e aprovação |

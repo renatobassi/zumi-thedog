@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-05 |
 
 ## 1. Propósito e escopo
 
@@ -115,3 +115,4 @@ Ciclo de cuidado, persistência, sprite, toque, fase, doença, humor.
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Primeiro marco: placa reconhecida e cumprimento na tela. |
+| 0.2 | Aprovado com a decisão `seguir`. Passos da placa em `firmware/README.md`. |
