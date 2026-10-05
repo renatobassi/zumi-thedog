@@ -4,7 +4,7 @@ O Zumi da descoberta é um cachorro caramelo que vive na placa. Este mapa ordena
 
 A descoberta está no [chat compartilhado](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667). A [visão](vision.md) já recusou voz, microfone, alto-falante, ESP32-S3, aplicativo e rede. O chat não substitui estes PRDs.
 
-Só o [Hello na placa](prds/0000-hello-na-placa.md) está `aprovado`. Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
+Só o [Hello na placa](prds/0000-hello-na-placa.md) está `aprovado`, e já está na placa. Próximo: aprovar o [Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md). Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
 
 ## Agora — o bichinho na mesa
 
@@ -12,7 +12,7 @@ A placa fica ligada na tomada. O dono cuida pelo toque e, horas depois, vê outr
 
 Ordem, cada marco demonstrável sozinho:
 
-1. [Hello na placa](prds/0000-hello-na-placa.md) — computador reconhece o CYD, grava o firmware e a tela mostra um cumprimento. Sem Zumi.
+1. ~~[Hello na placa](prds/0000-hello-na-placa.md)~~ — feito em 2026-10-05: o firmware do repositório grava no CYD e a tela mostra “Ola!”. Sem Zumi.
 2. [Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md) — barras, sono e quatro ações, testáveis no computador.
 3. [Estado na placa](prds/0002-estado-na-placa.md) — o mesmo ciclo continua depois de desligar.
 4. [Zumi na tela](prds/0003-zumi-na-tela.md) — fase e barras legíveis. Sem os sprites no repositório, este PRD não aprova.
