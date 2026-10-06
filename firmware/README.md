@@ -2,9 +2,9 @@
 
 Alvo `cyd`: ESP32-2432S028R (CYD clássico). Alvo `native`: testes do domínio no computador.
 
-Hoje o `cyd` grava o Hello do [PRD 0000](../docs/product/prds/0000-hello-na-placa.md): um cumprimento fixo na tela, sem Zumi. A regra do pet ainda não está aqui.
+Hoje o `cyd` grava o Hello do [PRD 0000](../docs/product/prds/0000-hello-na-placa.md): um cumprimento fixo na tela, sem Zumi. O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) mora no domínio e só roda no teste nativo.
 
-- `src/domain` — contrato do estado. Testável sem a placa.
+- `src/domain` — contrato do estado e o ciclo de cuidado. Testável sem a placa.
 - `src/ui` — toque entra, ação sai. Não mexe em barra. `hello.cpp` é a tela do PRD 0000.
 - `src/hal` — pinos do ESP32-2432S028R e o driver da tela (TFT_eSPI).
 - `src/persistence` — contrato de gravar o snapshot.
@@ -55,6 +55,8 @@ Sem pet, sem barra, sem toque. Tela apagada depois de uma gravação que termino
 Se o texto sair espelhado ou com as cores trocadas, o lote da placa usa outro controlador. Anote e abra um `fix/` contra o PRD 0000; não ajuste em `User_Setup.h` local.
 
 ## Testes do domínio
+
+O computador precisa de `g++` no PATH. Dentro de `firmware/`:
 
 ```bash
 pio test -e native

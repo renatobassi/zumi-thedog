@@ -2,7 +2,7 @@
 
 Um arquivo por feature, a partir de [../prd-template.md](../prd-template.md). Só status `aprovado` libera código.
 
-Só o 0000 está `aprovado`. Nos outros, a crítica recomenda seguir, encolher ou adiar. Mapa em [../roadmap.md](../roadmap.md). Fila em [../backlog.md](../backlog.md).
+O 0000 e o 0001 estão `aprovado`. Nos outros, a crítica recomenda seguir, encolher ou adiar. Mapa em [../roadmap.md](../roadmap.md). Fila em [../backlog.md](../backlog.md).
 
 | PRD | Decisão recomendada |
 |---|---|

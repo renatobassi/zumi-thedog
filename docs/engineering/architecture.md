@@ -43,7 +43,7 @@ firmware/
   test/            testes do domínio no ambiente nativo
 ```
 
-O snapshot em `domain/pet_snapshot.hpp` é o contrato entre regra, tela e gravação. Ainda não há decaimento, sprite nem toque implementados: isso seria feature sem PRD.
+O snapshot em `domain/pet_snapshot.hpp` é o contrato entre regra, tela e gravação. O ciclo de cuidado do PRD 0001 mora em `domain/care` e roda no teste nativo. Sprite, toque e gravação ainda não estão implementados.
 
 ## Fora até um PRD dizer o contrário
 

@@ -4,7 +4,7 @@
 #include "hal/display.hpp"
 #include "ui/hello.hpp"
 
-// Composição. Sem regra de jogo até o PRD correspondente.
+// Composição. A tela ainda é o Hello. O ciclo de cuidado fica no domínio e no teste nativo.
 
 static PetSnapshot g_pet;
 

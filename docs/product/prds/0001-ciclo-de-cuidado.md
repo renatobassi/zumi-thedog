@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-05 |
 
 ## 1. Propósito e escopo
 
@@ -91,9 +91,9 @@ Ao atingir energia 100 dormindo, acorda naquele instante. Nenhuma barra passa de
 
 ## 10. Critérios de liberação
 
-- [ ] Os casos de uso da seção 5 passam.
-- [ ] O KPI da seção 8 foi observado do jeito descrito.
-- [ ] Product SEO está `não se aplica`.
+- [x] Os casos de uso da seção 5 passam.
+- [x] O KPI da seção 8 foi observado do jeito descrito.
+- [x] Product SEO está `não se aplica`.
 
 ## 11. Product SEO
 
@@ -130,3 +130,4 @@ Fase, pose, doença, “voltou pra rua”, toque, pixel, persistência, cara de 
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Primeira especificação do ciclo, com taxas de calibração. |
+| 0.2 | Crítica aceita com `seguir`. Tabela 0.1 aprovada. Os oito casos rodam no teste nativo. |

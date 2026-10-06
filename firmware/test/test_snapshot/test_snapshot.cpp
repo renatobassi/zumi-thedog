@@ -2,6 +2,9 @@
 
 #include "domain/pet_snapshot.hpp"
 
+void setUp(void) {}
+void tearDown(void) {}
+
 void test_newborn_is_blanket_and_full(void) {
   PetSnapshot snap = pet_snapshot_newborn(1000);
   TEST_ASSERT_EQUAL(PHASE_BLANKET, snap.phase);
@@ -9,6 +12,7 @@ void test_newborn_is_blanket_and_full(void) {
   TEST_ASSERT_EQUAL_UINT8(100, snap.bars.energy);
   TEST_ASSERT_EQUAL_UINT8(100, snap.bars.fun);
   TEST_ASSERT_EQUAL_UINT8(100, snap.bars.hygiene);
+  TEST_ASSERT_FALSE(snap.asleep);
   TEST_ASSERT_EQUAL_UINT32(1000, snap.last_tick_ms);
 }
 

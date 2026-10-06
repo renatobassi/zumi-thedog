@@ -2,12 +2,12 @@
 
 Fila de produto. O detalhe está no PRD. Status de código segue o status do arquivo: só `aprovado` libera branch de firmware.
 
-O 0000 está `aprovado` e entregue. Os outros estão `em crítica`: a coluna Decisão é a recomendação da seção Crítica, ainda sem aceite.
+O 0000 e o 0001 estão `aprovado`. O 0000 está entregue na placa. O 0001 está entregue no teste nativo. Os outros estão `em crítica`: a coluna Decisão é a recomendação da seção Crítica, ainda sem aceite.
 
 | Ordem | PRD | Entrega | Depende de | Decisão | Código |
 |---|---|---|---|---|---|
 | 1 | [0000](prds/0000-hello-na-placa.md) | Placa reconhecida e Hello na tela | — | seguir | entregue: Hello visto na placa |
-| 2 | [0001](prds/0001-ciclo-de-cuidado.md) | Barras, sono e ações no tempo ligado | — | seguir | espera aprovação |
+| 2 | [0001](prds/0001-ciclo-de-cuidado.md) | Barras, sono e ações no tempo ligado | — | seguir | entregue: oito casos no teste nativo |
 | 3 | [0002](prds/0002-estado-na-placa.md) | O ciclo sobrevive a desligar | 0001 | seguir | espera aprovação |
 | 4 | [0003](prds/0003-zumi-na-tela.md) | Zumi e barras na tela 320×240 | 0000, 0001, sprites no repo | encolher | espera arte e aprovação |
 | 5 | [0004](prds/0004-cuidado-pelo-toque.md) | Quatro cuidados pelo toque | 0001, 0003 | seguir | espera aprovação |
@@ -21,8 +21,8 @@ O 0000 está `aprovado` e entregue. Os outros estão `em crítica`: a coluna Dec
 
 ## Como sair da crítica
 
-1. ~~Começar pelo Hello na placa.~~ Feito. O próximo é o ciclo de cuidado, que não usa a tela.
-2. Se a tabela de taxas do 0001 não servir, mudar a tabela e subir a versão antes de aprovar.
+1. ~~Começar pelo Hello na placa.~~ Feito.
+2. ~~Ciclo de cuidado.~~ Feito em 2026-10-05, com a tabela 0.1. Se a tabela mudar, a versão do 0001 sobe e os casos acompanham. O próximo aceite é o estado na placa.
 3. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
 4. Aí sim a branch de código, uma por PRD.
 
