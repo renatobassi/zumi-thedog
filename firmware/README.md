@@ -2,13 +2,13 @@
 
 Alvo `cyd`: ESP32-2432S028R (CYD clássico). Alvo `native`: testes do domínio no computador.
 
-Hoje o `cyd` grava o Hello do [PRD 0000](../docs/product/prds/0000-hello-na-placa.md): um cumprimento fixo na tela, sem Zumi. O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) mora no domínio e só roda no teste nativo.
+Hoje o `cyd` grava o Hello do [PRD 0000](../docs/product/prds/0000-hello-na-placa.md): um cumprimento fixo na tela, sem Zumi. O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) roda no domínio e, no firmware da placa, também no tempo ligado. O [PRD 0002](../docs/product/prds/0002-estado-na-placa.md) grava esse ciclo na flash da própria placa. Desligar não avança as barras.
 
 - `src/domain` — contrato do estado e o ciclo de cuidado. Testável sem a placa.
 - `src/ui` — toque entra, ação sai. Não mexe em barra. `hello.cpp` é a tela do PRD 0000.
 - `src/hal` — pinos do ESP32-2432S028R e o driver da tela (TFT_eSPI).
-- `src/persistence` — contrato de gravar o snapshot.
-- `src/main.cpp` — sobe um recém-nascido em memória, que não aparece na tela, e mostra o Hello.
+- `src/persistence` — grava e lê o snapshot. No computador o teste usa memória falsa. Na placa, a flash NVS.
+- `src/main.cpp` — restaura o ciclo ao ligar, deixa o tempo correr enquanto a placa está na tomada, grava quando o cuidado muda e mostra o Hello.
 
 Arquitetura: [docs/engineering/architecture.md](../docs/engineering/architecture.md).
 
@@ -53,6 +53,16 @@ Fundo preto, em paisagem:
 Sem pet, sem barra, sem toque. Tela apagada depois de uma gravação que terminou não conta como Hello: anote o que apareceu no log e não feche o PRD.
 
 Se o texto sair espelhado ou com as cores trocadas, o lote da placa usa outro controlador. Anote e abra um `fix/` contra o PRD 0000; não ajuste em `User_Setup.h` local.
+
+## Estado depois de desligar
+
+O serial a 115200 mostra o ciclo, por exemplo `zumi fome=100 energia=100 diversao=100 higiene=100 acordado`. Para repetir os casos 1 e 3 do PRD 0002, envie uma linha e desligue a USB:
+
+```text
+estado 40 70 55 80 acordado
+```
+
+Ao ligar de novo, a mesma linha tem de voltar com esses números, mesmo que a placa tenha ficado horas sem energia. O tempo da gaveta não entra nas barras. Se a flash estiver inválida ou vazia, nasce acordado com as quatro barras em 100.
 
 ## Testes do domínio
 
