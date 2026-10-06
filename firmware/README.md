@@ -2,13 +2,13 @@
 
 Alvo `cyd`: ESP32-2432S028R (CYD clássico). Alvo `native`: testes do domínio no computador.
 
-Hoje o `cyd` grava o Hello do [PRD 0000](../docs/product/prds/0000-hello-na-placa.md): um cumprimento fixo na tela, sem Zumi. O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) roda no domínio e, no firmware da placa, também no tempo ligado. O [PRD 0002](../docs/product/prds/0002-estado-na-placa.md) grava esse ciclo na flash da própria placa. Desligar não avança as barras.
+Hoje o `cyd` desenha o Zumi do [PRD 0003](../docs/product/prds/0003-zumi-na-tela.md): a pose da manta e as quatro barras. O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) roda no domínio e, no firmware da placa, também no tempo ligado. O [PRD 0002](../docs/product/prds/0002-estado-na-placa.md) grava esse ciclo na flash da própria placa. Desligar não avança as barras.
 
 - `src/domain` — contrato do estado e o ciclo de cuidado. Testável sem a placa.
-- `src/ui` — toque entra, ação sai. Não mexe em barra. `hello.cpp` é a tela do PRD 0000.
+- `src/ui` — estado entra, tela sai. Não mexe em barra. `frame.cpp` escolhe pose e comprimento; `zumi.cpp` desenha. `hello.cpp` é a tela antiga do PRD 0000.
 - `src/hal` — pinos do ESP32-2432S028R e o driver da tela (TFT_eSPI).
 - `src/persistence` — grava e lê o snapshot. No computador o teste usa memória falsa. Na placa, a flash NVS.
-- `src/main.cpp` — restaura o ciclo ao ligar, deixa o tempo correr enquanto a placa está na tomada, grava quando o cuidado muda e mostra o Hello.
+- `src/main.cpp` — restaura o ciclo ao ligar, deixa o tempo correr enquanto a placa está na tomada, grava quando o cuidado muda e mostra o Zumi com as barras.
 
 Arquitetura: [docs/engineering/architecture.md](../docs/engineering/architecture.md).
 
@@ -30,7 +30,7 @@ Sem porta nenhuma:
 - Troque o cabo. Cabo que só carrega acende a placa e não cria porta.
 - Confira o driver do passo 2 e reconecte.
 
-## Gravar o Hello
+## Gravar a tela
 
 Dentro de `firmware/`:
 
@@ -44,15 +44,19 @@ Se a gravação parar em `Connecting...`, segure o botão **BOOT** da placa quan
 
 ## O que se espera na tela
 
-Fundo preto, em paisagem:
+Fundo preto, em paisagem: o caramelo na pose da manta, no centro, e quatro barras com os nomes Fome, Energia, Diversao e Higiene. No nascimento as quatro vão até o fim da trilha. A barra baixa é mais curta. A fonte da placa não tem acento, então Diversão aparece como Diversao.
 
-- `Ola!` em caramelo;
-- `A placa esta pronta.` em branco;
-- `ESP32-2432S028R - 320x240` embaixo, menor.
+Para ver a fome mais curta sem esperar o decaimento, no serial a 115200:
 
-Sem pet, sem barra, sem toque. Tela apagada depois de uma gravação que terminou não conta como Hello: anote o que apareceu no log e não feche o PRD.
+```text
+estado 20 100 100 100 acordado
+```
 
-Se o texto sair espelhado ou com as cores trocadas, o lote da placa usa outro controlador. Anote e abra um `fix/` contra o PRD 0000; não ajuste em `User_Setup.h` local.
+A fome fica bem menor que as outras três. Fase sem sprite próprio, e dormindo enquanto não houver pose de sono, continuam na manta.
+
+Tela apagada depois de uma gravação que terminou não conta: anote o que apareceu no log.
+
+Se o desenho sair espelhado ou com as cores trocadas, o lote da placa usa outro controlador. Anote e abra um `fix/` contra o PRD 0003; não ajuste em `User_Setup.h` local.
 
 ## Estado depois de desligar
 

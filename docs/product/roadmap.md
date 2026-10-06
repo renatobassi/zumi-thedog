@@ -4,7 +4,7 @@ O Zumi da descoberta é um cachorro caramelo que vive na placa. Este mapa ordena
 
 A descoberta está no [chat compartilhado](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667). A [visão](vision.md) já recusou voz, microfone, alto-falante, ESP32-S3, aplicativo e rede. O chat não substitui estes PRDs.
 
-O [Hello na placa](prds/0000-hello-na-placa.md), o [Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md) e o [Estado na placa](prds/0002-estado-na-placa.md) estão `aprovado`. O Hello já está na placa. O ciclo passa no computador e o firmware grava esse estado na flash. O corte da USB do 0002 ainda não foi visto na mesa. Próximo: o [Zumi na tela](prds/0003-zumi-na-tela.md). Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
+O [Hello na placa](prds/0000-hello-na-placa.md), o [Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md), o [Estado na placa](prds/0002-estado-na-placa.md) e o [Zumi na tela](prds/0003-zumi-na-tela.md) estão `aprovado`. O Hello já está na placa. O ciclo passa no computador e o firmware grava esse estado na flash. O corte da USB do 0002 ainda não foi visto na mesa. A tela desenha a pose da manta e as quatro barras; reconhecer o caramelo na mesa ainda é o passo do 0003. Próximo: o [Cuidado pelo toque](prds/0004-cuidado-pelo-toque.md). Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
 
 ## Agora — o bichinho na mesa
 
@@ -15,7 +15,7 @@ Ordem, cada marco demonstrável sozinho:
 1. ~~[Hello na placa](prds/0000-hello-na-placa.md)~~ — feito em 2026-10-05: o firmware do repositório grava no CYD e a tela mostra “Ola!”. Sem Zumi.
 2. ~~[Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md)~~ — feito em 2026-10-05: barras, sono e quatro ações passam no computador. A placa ainda mostra o Hello.
 3. ~~[Estado na placa](prds/0002-estado-na-placa.md)~~ — feito em 2026-10-05 no computador: gravar, ler e nascer de novo passam com armazenamento falso. O tempo desligado não mexe nas barras. O firmware da placa grava o ciclo na flash e o serial mostra os números; confirmar desligando a USB ainda é o passo na mesa. A tela continua o Hello.
-4. [Zumi na tela](prds/0003-zumi-na-tela.md) — fase e barras legíveis. Sem os sprites no repositório, este PRD não aprova.
+4. ~~[Zumi na tela](prds/0003-zumi-na-tela.md)~~ — feito em 2026-10-05 no computador: a pose da manta e as quatro barras com nome passam no teste. Fase sem sprite próprio usa a manta. Sem pose de sono, dormindo também usa a manta. Reconhecer o caramelo na placa ainda é o passo na mesa.
 5. [Cuidado pelo toque](prds/0004-cuidado-pelo-toque.md) — comer, brincar, dormir e banho na tela.
 6. [Crescimento](prds/0005-crescimento.md) — manta, filhote, adulto sentado, adulto pleno.
 7. [Doença e a rua](prds/0007-doenca-e-a-rua.md) — abandono longo termina em “voltou pra rua”, com adoção de novo.

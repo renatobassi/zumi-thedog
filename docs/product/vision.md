@@ -21,7 +21,7 @@ O Zumi vive na placa. O dono alimenta, brinca, manda dormir e dá banho. Quatro 
 
 ## De onde veio
 
-A descoberta está no [chat compartilhado](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667): comparação de hardware, troca do dragão pelo caramelo, poses, lista de compra e a decisão de ficar no CYD clássico. A arte ainda não está versionada aqui. Sem sprite no repositório, renderizar o Zumi não é uma feature pronta para código.
+A descoberta está no [chat compartilhado](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667): comparação de hardware, troca do dragão pelo caramelo, poses, lista de compra e a decisão de ficar no CYD clássico. A pose parada da manta está versionada no repositório. Sono e as outras fases ainda não. Sem o sprite da pose que a tela for usar, renderizar essa pose não é uma feature pronta para código.
 
 ## Como o case se desdobra
 
