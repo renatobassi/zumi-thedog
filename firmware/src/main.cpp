@@ -6,17 +6,24 @@
 #include "domain/care.hpp"
 #include "domain/pet_snapshot.hpp"
 #include "hal/display.hpp"
+#include "hal/touch.hpp"
 #include "persistence/boot.hpp"
 #include "persistence/nvs_store.hpp"
+#include "ui/screen.hpp"
 #include "ui/zumi.hpp"
 
-// A tela mostra a pose e as barras. O ciclo roda e fica na flash da placa.
+// A tela mostra a pose, as barras e os quatro cuidados. O toque pede a ação; o ciclo decide.
 
 static PetSnapshot g_pet;
 static PetStore g_store;
+static TouchLatch g_latch = {false, 0};
+static CareNotice g_notice = {0, 0};
+static bool g_notice_drawn = false;
 
 static void show_pet() {
-  zumi_show(cyd_display(), g_pet);
+  const char* notice = care_notice_text(g_notice, millis());
+  zumi_show(cyd_display(), g_pet, notice);
+  g_notice_drawn = notice != 0;
 }
 
 static void log_pet() {
@@ -85,6 +92,26 @@ static void poll_serial() {
   }
 }
 
+static void apply_touch(uint32_t now) {
+  const TouchRead sample = cyd_touch().read();
+  if (!touch_accept(g_latch, sample.pressed, now)) {
+    return;
+  }
+
+  const TouchOutcome outcome = touch_at(g_pet, sample.x, sample.y);
+  if (!outcome.attempted) {
+    return;
+  }
+
+  care_notice_show(g_notice, outcome.notice, now);
+  if (outcome.accepted && !pet_commit(g_store, g_pet)) {
+    Serial.println("zumi gravacao falhou");
+  }
+  Serial.println(outcome.notice);
+  log_pet();
+  show_pet();
+}
+
 void setup() {
   Serial.begin(115200);
   g_store = nvs_pet_store();
@@ -93,6 +120,7 @@ void setup() {
 
   const Display& display = cyd_display();
   display.begin();
+  cyd_touch().begin();
   show_pet();
 }
 
@@ -100,6 +128,11 @@ void loop() {
   poll_serial();
 
   const uint32_t now = millis();
+  apply_touch(now);
+  if (g_notice_drawn && care_notice_text(g_notice, now) == 0) {
+    show_pet();
+  }
+
   const uint32_t elapsed = now - g_pet.last_tick_ms;
   if (elapsed == 0) {
     return;

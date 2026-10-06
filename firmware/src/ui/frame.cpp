@@ -59,27 +59,48 @@ SpriteView sprite_view(PoseId pose) {
   return view;
 }
 
+const int kCareColumnX = 198;
+const int kCareTargetW = 118;
+const int kCareTargetH = 54;
+const int kCareTargetGap = 6;
+
+const TouchAction kCareActions[4] = {TOUCH_FEED, TOUCH_PLAY, TOUCH_SLEEP, TOUCH_BATH};
+const char* kCareAwake[4] = {"Comer", "Brincar", "Dormir", "Banho"};
+
 ZumiFrame zumi_frame(const PetSnapshot& pet) {
   ZumiFrame frame;
   frame.pose = zumi_pose(pet.phase, pet.asleep);
 
+  const int column_w = kCareColumnX - 8;
   const SpriteView sprite = sprite_view(frame.pose);
   frame.dog_w = sprite.width * kZumiSpriteScale;
   frame.dog_h = sprite.height * kZumiSpriteScale;
-  frame.dog_x = sprite.width > 0 ? (kZumiScreenW - frame.dog_w) / 2 : 0;
-  frame.dog_y = 4;
+  frame.dog_x = sprite.width > 0 ? 4 + (column_w - frame.dog_w) / 2 : 0;
+  frame.dog_y = 2;
 
-  frame.track_x = 148;
+  frame.track_x = 82;
   frame.track_y = frame.dog_y + frame.dog_h + 8;
   frame.track_w = kZumiBarTrackPx;
   frame.track_h = 16;
-  frame.track_pitch = 26;
+  frame.track_pitch = 22;
 
   const uint8_t values[4] = {pet.bars.hunger, pet.bars.energy, pet.bars.fun, pet.bars.hygiene};
   for (int i = 0; i < 4; ++i) {
     frame.bars[i].name = kBarNames[i];
     frame.bars[i].value = values[i];
     frame.bars[i].fill_px = bar_fill_px(values[i]);
+  }
+
+  frame.notice_x = 4;
+  frame.notice_y = frame.track_y + 3 * frame.track_pitch + frame.track_h + 6;
+
+  for (int i = 0; i < 4; ++i) {
+    frame.targets[i].action = kCareActions[i];
+    frame.targets[i].label = (pet.asleep && kCareActions[i] == TOUCH_SLEEP) ? "Acordar" : kCareAwake[i];
+    frame.targets[i].x = kCareColumnX;
+    frame.targets[i].y = 4 + i * (kCareTargetH + kCareTargetGap);
+    frame.targets[i].w = kCareTargetW;
+    frame.targets[i].h = kCareTargetH;
   }
 
   return frame;

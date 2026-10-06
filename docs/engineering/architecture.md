@@ -37,13 +37,13 @@ firmware/
   platformio.ini
   src/main.cpp
   src/domain/      contrato do estado (PetSnapshot)
-  src/ui/          tela sem regra (frame.cpp: pose e barras do PRD 0003; hello.cpp: tela do PRD 0000)
-  src/hal/         pinos do CYD, contrato de display/touch e driver TFT_eSPI
+  src/ui/          tela sem regra (frame.cpp: pose, barras e alvos; screen.cpp: toque do PRD 0004; hello.cpp: tela do PRD 0000)
+  src/hal/         pinos do CYD, contrato de display/touch, driver TFT_eSPI e SPI do XPT2046
   src/persistence/ registro do snapshot, leitura ao ligar e flash NVS no alvo cyd
   test/            testes do domínio no ambiente nativo
 ```
 
-O snapshot em `domain/pet_snapshot.hpp` é o contrato entre regra, tela e gravação. O ciclo de cuidado do PRD 0001 mora em `domain/care` e roda no teste nativo. A gravação do PRD 0002 mora em `persistence`: o registro e a leitura no teste nativo, a flash NVS só no alvo `cyd`. Ao ligar, o relógio da sessão recomeça; o intervalo desligado não entra nas barras. A tela do PRD 0003 mora em `ui/frame`: escolhe a pose versionada e o comprimento das barras, e o teste nativo confere o encaixe em 320×240. O desenho no TFT fica em `ui/zumi` e no `hal`. Toque ainda não está implementado. A pose versionada é a da manta; fase sem sprite próprio volta para a pose anterior.
+O snapshot em `domain/pet_snapshot.hpp` é o contrato entre regra, tela e gravação. O ciclo de cuidado do PRD 0001 mora em `domain/care` e roda no teste nativo. A gravação do PRD 0002 mora em `persistence`: o registro e a leitura no teste nativo, a flash NVS só no alvo `cyd`. Ao ligar, o relógio da sessão recomeça; o intervalo desligado não entra nas barras. A tela do PRD 0003 mora em `ui/frame`: escolhe a pose versionada, o comprimento das barras e os quatro alvos, e o teste nativo confere o encaixe em 320×240. O desenho no TFT fica em `ui/zumi` e no `hal`. O toque do PRD 0004 mora em `ui/screen`: o retângulo vira uma ação do ciclo, e o ciclo continua dono do número. Segurar o dedo não repete. O aviso some sozinho. O SPI do XPT2046 fica no `hal`, separado do SPI da tela. A pose versionada é a da manta; fase sem sprite próprio volta para a pose anterior.
 
 ## Fora até um PRD dizer o contrário
 

@@ -51,6 +51,48 @@ void test_later_phase_falls_back_to_blanket(void) {
   TEST_ASSERT_EQUAL_INT(POSE_MANTA, zumi_frame(pet).pose);
 }
 
+static bool overlaps(int ax, int ay, int aw, int ah, int bx, int by, int bw, int bh) {
+  return ax < bx + bw && bx < ax + aw && ay < by + bh && by < ay + ah;
+}
+
+void test_four_targets_fit_beside_the_bars(void) {
+  const PetSnapshot awake = pet_snapshot_newborn(0);
+  const ZumiFrame frame = zumi_frame(awake);
+
+  TEST_ASSERT_EQUAL_STRING("Comer", frame.targets[0].label);
+  TEST_ASSERT_EQUAL_STRING("Brincar", frame.targets[1].label);
+  TEST_ASSERT_EQUAL_STRING("Dormir", frame.targets[2].label);
+  TEST_ASSERT_EQUAL_STRING("Banho", frame.targets[3].label);
+  TEST_ASSERT_EQUAL_INT(TOUCH_FEED, frame.targets[0].action);
+  TEST_ASSERT_EQUAL_INT(TOUCH_PLAY, frame.targets[1].action);
+  TEST_ASSERT_EQUAL_INT(TOUCH_SLEEP, frame.targets[2].action);
+  TEST_ASSERT_EQUAL_INT(TOUCH_BATH, frame.targets[3].action);
+
+  for (int i = 0; i < 4; ++i) {
+    const CareTarget& target = frame.targets[i];
+    TEST_ASSERT_TRUE(inside_screen(target.x, target.y, target.w, target.h));
+    TEST_ASSERT_TRUE(target.w >= 64);
+    TEST_ASSERT_TRUE(target.h >= 48);
+    TEST_ASSERT_TRUE(target.x >= frame.dog_x + frame.dog_w);
+    for (int b = 0; b < 4; ++b) {
+      const int y = frame.track_y + b * frame.track_pitch;
+      TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, frame.track_x, y, frame.track_w, frame.track_h));
+      TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, 4, y, 70, frame.track_h));
+    }
+    TEST_ASSERT_TRUE(frame.notice_y + 16 <= kZumiScreenH);
+    TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, frame.notice_x, frame.notice_y, 150, 16));
+  }
+}
+
+void test_sleep_target_says_wake(void) {
+  PetSnapshot pet = pet_snapshot_newborn(0);
+  pet.asleep = true;
+  const ZumiFrame frame = zumi_frame(pet);
+  TEST_ASSERT_EQUAL_STRING("Acordar", frame.targets[2].label);
+  TEST_ASSERT_EQUAL_STRING("Comer", frame.targets[0].label);
+  TEST_ASSERT_EQUAL_INT(TOUCH_SLEEP, frame.targets[2].action);
+}
+
 void test_sleep_without_sprite_keeps_phase_pose(void) {
   PetSnapshot pet = pet_snapshot_newborn(0);
   pet.asleep = true;
@@ -72,6 +114,8 @@ int main(int argc, char** argv) {
   RUN_TEST(test_newborn_shows_blanket_and_full_bars);
   RUN_TEST(test_low_hunger_is_shorter);
   RUN_TEST(test_later_phase_falls_back_to_blanket);
+  RUN_TEST(test_four_targets_fit_beside_the_bars);
+  RUN_TEST(test_sleep_target_says_wake);
   RUN_TEST(test_sleep_without_sprite_keeps_phase_pose);
   return UNITY_END();
 }
