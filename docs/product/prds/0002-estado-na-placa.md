@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-05 |
 
 ## 1. Propósito e escopo
 
@@ -73,9 +73,9 @@ Caminho de falha: leitura inválida ou ausente começa uma vida nova. Não tenta
 
 ## 10. Critérios de liberação
 
-- [ ] Os casos de uso da seção 5 passam.
+- [x] Os casos de uso da seção 5 passam.
 - [ ] O KPI da seção 8 foi observado do jeito descrito, inclusive o desligar da USB.
-- [ ] Product SEO está `não se aplica`.
+- [x] Product SEO está `não se aplica`.
 
 ## 11. Product SEO
 
@@ -101,6 +101,8 @@ Não há página pública. O estado fica na placa de quem cuida.
 
 Decisão: `seguir`.
 
+`aprovado` em 2026-10-05. Os cinco casos passam no computador, com armazenamento falso. O firmware grava na flash da placa; o desligar da USB ainda não foi observado na mesa, então o critério da seção 10 que inclui esse corte continua aberto.
+
 ## 14. Fora desta entrega
 
 Contar horas desligado, microSD, nuvem, tela, toque, doença, fase.
@@ -110,3 +112,4 @@ Contar horas desligado, microSD, nuvem, tela, toque, doença, fase.
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Persistência do ciclo com o tempo pausado sem energia. |
+| 0.2 | Crítica aceita com `seguir`. Casos 1 a 5 no teste nativo. A placa grava o ciclo na flash; o corte da USB fica para a mesa. |

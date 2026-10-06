@@ -39,11 +39,11 @@ firmware/
   src/domain/      contrato do estado (PetSnapshot)
   src/ui/          interface da tela, sem regra (hello.cpp: tela do PRD 0000)
   src/hal/         pinos do CYD, contrato de display/touch e driver TFT_eSPI
-  src/persistence/ contrato de gravar o snapshot
+  src/persistence/ registro do snapshot, leitura ao ligar e flash NVS no alvo cyd
   test/            testes do domínio no ambiente nativo
 ```
 
-O snapshot em `domain/pet_snapshot.hpp` é o contrato entre regra, tela e gravação. O ciclo de cuidado do PRD 0001 mora em `domain/care` e roda no teste nativo. Sprite, toque e gravação ainda não estão implementados.
+O snapshot em `domain/pet_snapshot.hpp` é o contrato entre regra, tela e gravação. O ciclo de cuidado do PRD 0001 mora em `domain/care` e roda no teste nativo. A gravação do PRD 0002 mora em `persistence`: o registro e a leitura no teste nativo, a flash NVS só no alvo `cyd`. Ao ligar, o relógio da sessão recomeça; o intervalo desligado não entra nas barras. Sprite e toque ainda não estão implementados.
 
 ## Fora até um PRD dizer o contrário
 
