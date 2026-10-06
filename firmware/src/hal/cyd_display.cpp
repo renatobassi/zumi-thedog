@@ -24,13 +24,41 @@ static void cyd_clear(uint16_t color) {
   g_tft.fillScreen(color);
 }
 
+static void cyd_text(const char* text, int x, int y, uint8_t font, uint16_t color) {
+  g_tft.setTextColor(color);
+  g_tft.setTextDatum(TL_DATUM);
+  g_tft.drawString(text, x, y, font);
+}
+
 static void cyd_text_centered(const char* text, int y, uint8_t font, uint16_t color) {
   g_tft.setTextColor(color);
   g_tft.setTextDatum(TC_DATUM);
   g_tft.drawString(text, g_tft.width() / 2, y, font);
 }
 
+static void cyd_fill_rect(int x, int y, int w, int h, uint16_t color) {
+  if (w <= 0 || h <= 0) {
+    return;
+  }
+  g_tft.fillRect(x, y, w, h, color);
+}
+
+static void cyd_sprite(int x, int y, int w, int h, const uint16_t* pixels, int scale, uint16_t key) {
+  if (pixels == 0 || w <= 0 || h <= 0 || scale <= 0) {
+    return;
+  }
+  for (int sy = 0; sy < h; ++sy) {
+    for (int sx = 0; sx < w; ++sx) {
+      const uint16_t color = pixels[sy * w + sx];
+      if (color == key) {
+        continue;
+      }
+      g_tft.fillRect(x + sx * scale, y + sy * scale, scale, scale, color);
+    }
+  }
+}
+
 const Display& cyd_display() {
-  static const Display display = {cyd_begin, cyd_clear, cyd_text_centered};
+  static const Display display = {cyd_begin, cyd_clear, cyd_text, cyd_text_centered, cyd_fill_rect, cyd_sprite};
   return display;
 }

@@ -8,12 +8,16 @@
 #include "hal/display.hpp"
 #include "persistence/boot.hpp"
 #include "persistence/nvs_store.hpp"
-#include "ui/hello.hpp"
+#include "ui/zumi.hpp"
 
-// A tela continua o Hello. O ciclo roda e fica na flash da placa.
+// A tela mostra a pose e as barras. O ciclo roda e fica na flash da placa.
 
 static PetSnapshot g_pet;
 static PetStore g_store;
+
+static void show_pet() {
+  zumi_show(cyd_display(), g_pet);
+}
 
 static void log_pet() {
   Serial.printf("zumi fome=%u energia=%u diversao=%u higiene=%u %s\n", g_pet.bars.hunger, g_pet.bars.energy,
@@ -54,6 +58,7 @@ static void apply_estado(const char* line) {
   g_pet.bars.hygiene = static_cast<uint8_t>(hygiene);
   g_pet.asleep = asleep;
   g_pet.last_tick_ms = millis();
+  show_pet();
   if (!pet_commit(g_store, g_pet)) {
     Serial.println("zumi gravacao falhou");
     return;
@@ -88,7 +93,7 @@ void setup() {
 
   const Display& display = cyd_display();
   display.begin();
-  hello_show(display);
+  show_pet();
 }
 
 void loop() {
@@ -108,5 +113,6 @@ void loop() {
       Serial.println("zumi gravacao falhou");
     }
     log_pet();
+    show_pet();
   }
 }

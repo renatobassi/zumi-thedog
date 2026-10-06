@@ -2,14 +2,14 @@
 
 Fila de produto. O detalhe está no PRD. Status de código segue o status do arquivo: só `aprovado` libera branch de firmware.
 
-O 0000, o 0001 e o 0002 estão `aprovado`. O 0000 está entregue na placa. O 0001 está entregue no teste nativo. O 0002 está entregue no teste nativo e no firmware da flash; o corte da USB ainda não foi visto na mesa. Os outros estão `em crítica`: a coluna Decisão é a recomendação da seção Crítica, ainda sem aceite.
+O 0000, o 0001, o 0002 e o 0003 estão `aprovado`. O 0000 está entregue na placa. O 0001 está entregue no teste nativo. O 0002 está entregue no teste nativo e no firmware da flash; o corte da USB ainda não foi visto na mesa. O 0003 desenha a pose da manta e as barras no teste nativo; o reconhecimento na placa ainda não foi visto na mesa. Os outros estão `em crítica`: a coluna Decisão é a recomendação da seção Crítica, ainda sem aceite.
 
 | Ordem | PRD | Entrega | Depende de | Decisão | Código |
 |---|---|---|---|---|---|
 | 1 | [0000](prds/0000-hello-na-placa.md) | Placa reconhecida e Hello na tela | — | seguir | entregue: Hello visto na placa |
 | 2 | [0001](prds/0001-ciclo-de-cuidado.md) | Barras, sono e ações no tempo ligado | — | seguir | entregue: oito casos no teste nativo |
 | 3 | [0002](prds/0002-estado-na-placa.md) | O ciclo sobrevive a desligar | 0001 | seguir | entregue no teste nativo; flash no firmware; falta ver o corte da USB |
-| 4 | [0003](prds/0003-zumi-na-tela.md) | Zumi e barras na tela 320×240 | 0000, 0001, sprites no repo | encolher | espera arte e aprovação |
+| 4 | [0003](prds/0003-zumi-na-tela.md) | Zumi e barras na tela 320×240 | 0000, 0001, sprites no repo | encolher | entregue no teste nativo; falta reconhecer na placa |
 | 5 | [0004](prds/0004-cuidado-pelo-toque.md) | Quatro cuidados pelo toque | 0001, 0003 | seguir | espera aprovação |
 | 6 | [0005](prds/0005-crescimento.md) | Quatro fases pela idade ligada | 0001, 0002, 0003 | encolher | espera aprovação |
 | 7 | [0007](prds/0007-doenca-e-a-rua.md) | Doente e volta pra rua | 0001, 0002, 0004 | seguir | espera aprovação |
@@ -23,9 +23,10 @@ O 0000, o 0001 e o 0002 estão `aprovado`. O 0000 está entregue na placa. O 000
 
 1. ~~Começar pelo Hello na placa.~~ Feito.
 2. ~~Ciclo de cuidado.~~ Feito em 2026-10-05, com a tabela 0.1. Se a tabela mudar, a versão do 0001 sobe e os casos acompanham.
-3. ~~Estado na placa.~~ Feito em 2026-10-05 no computador. O firmware grava na flash. O corte da USB ainda precisa ser visto na mesa. O próximo aceite é o Zumi na tela, e ele espera os sprites.
-4. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
-5. Aí sim a branch de código, uma por PRD.
+3. ~~Estado na placa.~~ Feito em 2026-10-05 no computador. O firmware grava na flash. O corte da USB ainda precisa ser visto na mesa.
+4. ~~Zumi na tela.~~ Feito em 2026-10-05 no computador, com a pose da manta no repositório. O reconhecimento na placa ainda precisa ser visto na mesa.
+5. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
+6. Aí sim a branch de código, uma por PRD.
 
 ## Premissas que a aprovação do 0001 trava
 
