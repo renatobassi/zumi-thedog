@@ -59,11 +59,6 @@ SpriteView sprite_view(PoseId pose) {
   return view;
 }
 
-const int kCareColumnX = 198;
-const int kCareTargetW = 118;
-const int kCareTargetH = 54;
-const int kCareTargetGap = 6;
-
 const TouchAction kCareActions[4] = {TOUCH_FEED, TOUCH_PLAY, TOUCH_SLEEP, TOUCH_BATH};
 const char* kCareAwake[4] = {"Comer", "Brincar", "Dormir", "Banho"};
 
@@ -71,36 +66,32 @@ ZumiFrame zumi_frame(const PetSnapshot& pet) {
   ZumiFrame frame;
   frame.pose = zumi_pose(pet.phase, pet.asleep);
 
-  const int column_w = kCareColumnX - 8;
   const SpriteView sprite = sprite_view(frame.pose);
   frame.dog_w = sprite.width * kZumiSpriteScale;
   frame.dog_h = sprite.height * kZumiSpriteScale;
-  frame.dog_x = sprite.width > 0 ? 4 + (column_w - frame.dog_w) / 2 : 0;
-  frame.dog_y = 2;
+  frame.dog_x = sprite.width > 0 ? (kZumiScreenW - frame.dog_w) / 2 : 0;
+  frame.dog_y = kZumiDockY - frame.dog_h;
 
-  frame.track_x = 82;
-  frame.track_y = frame.dog_y + frame.dog_h + 8;
   frame.track_w = kZumiBarTrackPx;
-  frame.track_h = 16;
-  frame.track_pitch = 22;
+  frame.track_h = 8;
+
+  frame.notice_x = 8;
+  frame.notice_y = kZumiDockY - 18;
 
   const uint8_t values[4] = {pet.bars.hunger, pet.bars.energy, pet.bars.fun, pet.bars.hygiene};
   for (int i = 0; i < 4; ++i) {
+    frame.targets[i].action = kCareActions[i];
+    frame.targets[i].label = (pet.asleep && kCareActions[i] == TOUCH_SLEEP) ? "Acordar" : kCareAwake[i];
+    frame.targets[i].x = kZumiDockX + i * (kZumiDockW + kZumiDockGap);
+    frame.targets[i].y = kZumiDockY;
+    frame.targets[i].w = kZumiDockW;
+    frame.targets[i].h = kZumiDockH;
+
     frame.bars[i].name = kBarNames[i];
     frame.bars[i].value = values[i];
     frame.bars[i].fill_px = bar_fill_px(values[i]);
-  }
-
-  frame.notice_x = 4;
-  frame.notice_y = frame.track_y + 3 * frame.track_pitch + frame.track_h + 6;
-
-  for (int i = 0; i < 4; ++i) {
-    frame.targets[i].action = kCareActions[i];
-    frame.targets[i].label = (pet.asleep && kCareActions[i] == TOUCH_SLEEP) ? "Acordar" : kCareAwake[i];
-    frame.targets[i].x = kCareColumnX;
-    frame.targets[i].y = 4 + i * (kCareTargetH + kCareTargetGap);
-    frame.targets[i].w = kCareTargetW;
-    frame.targets[i].h = kCareTargetH;
+    frame.bars[i].x = frame.targets[i].x + (kZumiDockW - kZumiBarTrackPx) / 2;
+    frame.bars[i].y = frame.targets[i].y + 36;
   }
 
   return frame;

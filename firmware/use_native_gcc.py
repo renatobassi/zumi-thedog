@@ -14,3 +14,5 @@ if os.name == "nt" and shutil.which("g++") is None:
 
 if os.name == "nt":
     env.Append(LINKFLAGS=["-static-libgcc", "-static-libstdc++", "-static"])
+    if env["PIOENV"] == "preview":
+        env.Append(LINKFLAGS=["-mwindows"])

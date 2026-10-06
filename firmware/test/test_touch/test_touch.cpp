@@ -102,9 +102,9 @@ void test_miss_does_nothing(void) {
 void test_gap_between_targets_is_a_miss(void) {
   PetSnapshot pet = pet_snapshot_newborn(0);
   const ZumiFrame frame = zumi_frame(pet);
-  const int y = frame.targets[0].y + frame.targets[0].h + 1;
-  TEST_ASSERT_TRUE(y < frame.targets[1].y);
-  const TouchOutcome outcome = touch_at(pet, frame.targets[0].x + 4, y);
+  const int x = frame.targets[0].x + frame.targets[0].w + 1;
+  TEST_ASSERT_TRUE(x < frame.targets[1].x);
+  const TouchOutcome outcome = touch_at(pet, x, frame.targets[0].y + 4);
   TEST_ASSERT_FALSE(outcome.attempted);
   expect_bars(pet, 100, 100, 100, 100);
 }

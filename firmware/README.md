@@ -44,7 +44,7 @@ Se a gravação parar em `Connecting...`, segure o botão **BOOT** da placa quan
 
 ## O que se espera na tela
 
-Fundo preto, em paisagem: o caramelo na pose da manta à esquerda, quatro barras com os nomes Fome, Energia, Diversao e Higiene, e à direita os alvos Comer, Brincar, Dormir e Banho. No nascimento as quatro barras vão até o fim da trilha. A barra baixa é mais curta. A fonte da placa não tem acento, então Diversão aparece como Diversao.
+Paisagem 320×240: parede, chão, tapete e o caramelo sentado no centro. Embaixo, os alvos Comer, Brincar, Dormir e Banho, cada um com a barra daquele cuidado (Fome, Energia, Diversao, Higiene). No nascimento as quatro barras vão até o fim da trilha. A barra baixa é mais curta. A fonte da placa não tem acento, então Diversão aparece como Diversao.
 
 Um toque em Comer, Brincar, Dormir ou Banho pede essa ação uma vez. Segurar o dedo não repete. Dormindo, o mesmo lugar diz Acordar. Se a ação não vale, a frase some sozinha e as barras ficam iguais: “Nao brincou” quando falta energia, “Esta dormindo” quando ele está no sono. Toque fora dos quatro nomes não muda nada. O serial mostra a mesma frase.
 
@@ -54,7 +54,7 @@ Para ver a fome mais curta sem esperar o decaimento, no serial a 115200:
 estado 20 100 100 100 acordado
 ```
 
-A fome fica bem menor que as outras três. Fase sem sprite próprio, e dormindo enquanto não houver pose de sono, continuam na manta.
+A fome fica bem menor que as outras três, na barra de Comer. Fase sem sprite próprio, e dormindo enquanto não houver pose de sono, continuam no adulto sentado.
 
 Tela apagada depois de uma gravação que terminou não conta: anote o que apareceu no log.
 
@@ -71,6 +71,17 @@ estado 40 70 55 80 acordado
 ```
 
 Ao ligar de novo, a mesma linha tem de voltar com esses números, mesmo que a placa tenha ficado horas sem energia. O tempo da gaveta não entra nas barras. Se a flash estiver inválida ou vazia, nasce acordado com as quatro barras em 100.
+
+## Preview no computador
+
+A mesma tela de 320×240, com a fonte 2 da placa, sem gravar o CYD. Dentro de `firmware/`:
+
+```bash
+pio run -e preview
+.pio/build/preview/program.exe
+```
+
+A janela abre em 3×, pixel a pixel. O clique nos nomes Comer, Brincar, Dormir e Banho é o toque do PRD 0004. Esc fecha. O relógio do decaimento e a flash ficam na placa.
 
 ## Testes do domínio
 
