@@ -20,12 +20,16 @@ void test_newborn_shows_blanket_and_full_bars(void) {
   TEST_ASSERT_EQUAL_STRING("Diversao", frame.bars[2].name);
   TEST_ASSERT_EQUAL_STRING("Higiene", frame.bars[3].name);
 
+  TEST_ASSERT_TRUE(frame.dog_y + frame.dog_h <= frame.targets[0].y);
   for (int i = 0; i < 4; ++i) {
-    const int y = frame.track_y + i * frame.track_pitch;
     TEST_ASSERT_EQUAL_UINT8(100, frame.bars[i].value);
     TEST_ASSERT_EQUAL_INT(kZumiBarTrackPx, frame.bars[i].fill_px);
-    TEST_ASSERT_TRUE(inside_screen(frame.track_x, y, frame.track_w, frame.track_h));
-    TEST_ASSERT_TRUE(frame.dog_y + frame.dog_h <= y);
+    TEST_ASSERT_TRUE(inside_screen(frame.bars[i].x, frame.bars[i].y, frame.track_w, frame.track_h));
+    TEST_ASSERT_TRUE(frame.dog_y + frame.dog_h <= frame.bars[i].y);
+    TEST_ASSERT_TRUE(frame.bars[i].x >= frame.targets[i].x);
+    TEST_ASSERT_TRUE(frame.bars[i].x + frame.track_w <= frame.targets[i].x + frame.targets[i].w);
+    TEST_ASSERT_TRUE(frame.bars[i].y >= frame.targets[i].y);
+    TEST_ASSERT_TRUE(frame.bars[i].y + frame.track_h <= frame.targets[i].y + frame.targets[i].h);
   }
 }
 
@@ -55,7 +59,7 @@ static bool overlaps(int ax, int ay, int aw, int ah, int bx, int by, int bw, int
   return ax < bx + bw && bx < ax + aw && ay < by + bh && by < ay + ah;
 }
 
-void test_four_targets_fit_beside_the_bars(void) {
+void test_four_targets_sit_in_the_dock(void) {
   const PetSnapshot awake = pet_snapshot_newborn(0);
   const ZumiFrame frame = zumi_frame(awake);
 
@@ -73,14 +77,15 @@ void test_four_targets_fit_beside_the_bars(void) {
     TEST_ASSERT_TRUE(inside_screen(target.x, target.y, target.w, target.h));
     TEST_ASSERT_TRUE(target.w >= 64);
     TEST_ASSERT_TRUE(target.h >= 48);
-    TEST_ASSERT_TRUE(target.x >= frame.dog_x + frame.dog_w);
-    for (int b = 0; b < 4; ++b) {
-      const int y = frame.track_y + b * frame.track_pitch;
-      TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, frame.track_x, y, frame.track_w, frame.track_h));
-      TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, 4, y, 70, frame.track_h));
-    }
-    TEST_ASSERT_TRUE(frame.notice_y + 16 <= kZumiScreenH);
+    TEST_ASSERT_EQUAL_INT(frame.targets[0].y, target.y);
+    TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, frame.dog_x, frame.dog_y, frame.dog_w, frame.dog_h));
+    TEST_ASSERT_TRUE(frame.notice_y + 16 <= target.y);
     TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, frame.notice_x, frame.notice_y, 150, 16));
+    if (i > 0) {
+      const CareTarget& previous = frame.targets[i - 1];
+      TEST_ASSERT_TRUE(target.x >= previous.x + previous.w);
+      TEST_ASSERT_FALSE(overlaps(target.x, target.y, target.w, target.h, previous.x, previous.y, previous.w, previous.h));
+    }
   }
 }
 
@@ -114,7 +119,7 @@ int main(int argc, char** argv) {
   RUN_TEST(test_newborn_shows_blanket_and_full_bars);
   RUN_TEST(test_low_hunger_is_shorter);
   RUN_TEST(test_later_phase_falls_back_to_blanket);
-  RUN_TEST(test_four_targets_fit_beside_the_bars);
+  RUN_TEST(test_four_targets_sit_in_the_dock);
   RUN_TEST(test_sleep_target_says_wake);
   RUN_TEST(test_sleep_without_sprite_keeps_phase_pose);
   return UNITY_END();
