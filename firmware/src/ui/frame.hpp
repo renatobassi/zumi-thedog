@@ -9,7 +9,7 @@
 static const int kZumiScreenW = 320;
 static const int kZumiScreenH = 240;
 static const int kZumiSpriteScale = 4;
-static const int kZumiBarTrackPx = 160;
+static const int kZumiBarTrackPx = 104;
 static const uint16_t kSpriteKey = 0xF81F;
 
 enum PoseId { POSE_NONE = 0, POSE_MANTA = 1, POSE_SLEEP = 2 };
@@ -26,6 +26,23 @@ struct BarView {
   int fill_px;
 };
 
+enum TouchAction {
+  TOUCH_NONE = 0,
+  TOUCH_FEED = 1,
+  TOUCH_PLAY = 2,
+  TOUCH_SLEEP = 3,
+  TOUCH_BATH = 4
+};
+
+struct CareTarget {
+  TouchAction action;
+  const char* label;
+  int x;
+  int y;
+  int w;
+  int h;
+};
+
 struct ZumiFrame {
   PoseId pose;
   int dog_x;
@@ -38,6 +55,9 @@ struct ZumiFrame {
   int track_h;
   int track_pitch;
   BarView bars[4];
+  int notice_x;
+  int notice_y;
+  CareTarget targets[4];
 };
 
 bool pose_versioned(PoseId pose);

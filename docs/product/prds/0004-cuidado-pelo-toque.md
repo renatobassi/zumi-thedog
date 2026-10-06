@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-05 |
 
 ## 1. Propósito e escopo
 
@@ -74,9 +74,9 @@ Caminho de falha: toque fora não faz nada. Toque numa ação recusada avisa e n
 
 ## 10. Critérios de liberação
 
-- [ ] Os casos de uso da seção 5 passam.
-- [ ] O KPI da seção 8 foi observado do jeito descrito.
-- [ ] Product SEO está `não se aplica`.
+- [x] Os casos de uso da seção 5 passam no computador, com toque simulado.
+- [ ] O KPI da seção 8 foi observado do jeito descrito, na placa.
+- [x] Product SEO está `não se aplica`.
 
 ## 11. Product SEO
 
@@ -104,6 +104,8 @@ O corte menor é a proposta.
 
 Decisão: `seguir`.
 
+`aprovado` em 2026-10-05. Os casos 1 a 6 passam no teste nativo: acerto, recusa, dormir que vira acordar, cuidado dormindo e toque fora. O dedo na placa ainda não foi visto, então o KPI da seção 8 continua aberto.
+
 ## 14. Fora desta entrega
 
 Animação da ação, tela extra de estatística, som de clique, botão físico, voz.
@@ -113,3 +115,4 @@ Animação da ação, tela extra de estatística, som de clique, botão físico,
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Quatro alvos e a recusa visível no touch resistivo. |
+| 0.2 | Crítica aceita com `seguir`. Casos 1 a 6 no teste nativo. O acerto na placa fica para a mesa. |

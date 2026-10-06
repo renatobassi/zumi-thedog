@@ -2,13 +2,13 @@
 
 Alvo `cyd`: ESP32-2432S028R (CYD clássico). Alvo `native`: testes do domínio no computador.
 
-Hoje o `cyd` desenha o Zumi do [PRD 0003](../docs/product/prds/0003-zumi-na-tela.md): a pose da manta e as quatro barras. O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) roda no domínio e, no firmware da placa, também no tempo ligado. O [PRD 0002](../docs/product/prds/0002-estado-na-placa.md) grava esse ciclo na flash da própria placa. Desligar não avança as barras.
+Hoje o `cyd` desenha o Zumi do [PRD 0003](../docs/product/prds/0003-zumi-na-tela.md) e os quatro cuidados do [PRD 0004](../docs/product/prds/0004-cuidado-pelo-toque.md). O ciclo do [PRD 0001](../docs/product/prds/0001-ciclo-de-cuidado.md) roda no domínio e, no firmware da placa, também no tempo ligado. O [PRD 0002](../docs/product/prds/0002-estado-na-placa.md) grava esse ciclo na flash da própria placa. Desligar não avança as barras.
 
 - `src/domain` — contrato do estado e o ciclo de cuidado. Testável sem a placa.
-- `src/ui` — estado entra, tela sai. Não mexe em barra. `frame.cpp` escolhe pose e comprimento; `zumi.cpp` desenha. `hello.cpp` é a tela antiga do PRD 0000.
-- `src/hal` — pinos do ESP32-2432S028R e o driver da tela (TFT_eSPI).
+- `src/ui` — estado entra, tela sai. Não mexe em barra por conta própria. `frame.cpp` escolhe pose, comprimento e alvos; `screen.cpp` traduz o toque na ação do ciclo; `zumi.cpp` desenha. `hello.cpp` é a tela antiga do PRD 0000.
+- `src/hal` — pinos do ESP32-2432S028R, o driver da tela (TFT_eSPI) e o SPI separado do toque.
 - `src/persistence` — grava e lê o snapshot. No computador o teste usa memória falsa. Na placa, a flash NVS.
-- `src/main.cpp` — restaura o ciclo ao ligar, deixa o tempo correr enquanto a placa está na tomada, grava quando o cuidado muda e mostra o Zumi com as barras.
+- `src/main.cpp` — restaura o ciclo ao ligar, deixa o tempo correr enquanto a placa está na tomada, aplica um toque por aperto e grava quando o cuidado muda.
 
 Arquitetura: [docs/engineering/architecture.md](../docs/engineering/architecture.md).
 
@@ -44,7 +44,9 @@ Se a gravação parar em `Connecting...`, segure o botão **BOOT** da placa quan
 
 ## O que se espera na tela
 
-Fundo preto, em paisagem: o caramelo na pose da manta, no centro, e quatro barras com os nomes Fome, Energia, Diversao e Higiene. No nascimento as quatro vão até o fim da trilha. A barra baixa é mais curta. A fonte da placa não tem acento, então Diversão aparece como Diversao.
+Fundo preto, em paisagem: o caramelo na pose da manta à esquerda, quatro barras com os nomes Fome, Energia, Diversao e Higiene, e à direita os alvos Comer, Brincar, Dormir e Banho. No nascimento as quatro barras vão até o fim da trilha. A barra baixa é mais curta. A fonte da placa não tem acento, então Diversão aparece como Diversao.
+
+Um toque em Comer, Brincar, Dormir ou Banho pede essa ação uma vez. Segurar o dedo não repete. Dormindo, o mesmo lugar diz Acordar. Se a ação não vale, a frase some sozinha e as barras ficam iguais: “Nao brincou” quando falta energia, “Esta dormindo” quando ele está no sono. Toque fora dos quatro nomes não muda nada. O serial mostra a mesma frase.
 
 Para ver a fome mais curta sem esperar o decaimento, no serial a 115200:
 
@@ -58,6 +60,8 @@ Tela apagada depois de uma gravação que terminou não conta: anote o que apare
 
 Se o desenho sair espelhado ou com as cores trocadas, o lote da placa usa outro controlador. Anote e abra um `fix/` contra o PRD 0003; não ajuste em `User_Setup.h` local.
 
+Se o dedo acerta o nome errado, o lote calibrado do toque é outro. Anote o canto e abra um `fix/` contra o PRD 0004. O toque usa o SPI próprio do CYD (CLK 25, MOSI 32, MISO 39, CS 33), não o SPI da tela.
+
 ## Estado depois de desligar
 
 O serial a 115200 mostra o ciclo, por exemplo `zumi fome=100 energia=100 diversao=100 higiene=100 acordado`. Para repetir os casos 1 e 3 do PRD 0002, envie uma linha e desligue a USB:
@@ -70,7 +74,7 @@ Ao ligar de novo, a mesma linha tem de voltar com esses números, mesmo que a pl
 
 ## Testes do domínio
 
-O computador precisa de `g++` no PATH. Dentro de `firmware/`:
+No Windows, se não houver `g++` no PATH, o teste usa o MinGW que o PlatformIO já baixou. Dentro de `firmware/`:
 
 ```bash
 pio test -e native
