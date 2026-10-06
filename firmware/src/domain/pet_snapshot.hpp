@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 // Contrato do Zumi entre regra, tela e gravação.
-// Decaimento, fase e game over só entram com PRD aprovado.
+// O ciclo de cuidado mora em care.hpp. Fase e game over entram com o PRD de cada um.
 
 enum Phase {
   PHASE_BLANKET = 0,
@@ -22,6 +22,7 @@ struct Bars {
 struct PetSnapshot {
   Phase phase;
   Bars bars;
+  bool asleep;
   uint32_t last_tick_ms;
 };
 
@@ -32,6 +33,7 @@ inline PetSnapshot pet_snapshot_newborn(uint32_t now_ms) {
   snap.bars.energy = 100;
   snap.bars.fun = 100;
   snap.bars.hygiene = 100;
+  snap.asleep = false;
   snap.last_tick_ms = now_ms;
   return snap;
 }
