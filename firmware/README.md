@@ -74,7 +74,7 @@ Ao ligar de novo, a mesma linha tem de voltar com esses números, mesmo que a pl
 
 ## Testes do domínio
 
-O computador precisa de `g++` no PATH. Dentro de `firmware/`:
+No Windows, se não houver `g++` no PATH, o teste usa o MinGW que o PlatformIO já baixou. Dentro de `firmware/`:
 
 ```bash
 pio test -e native
