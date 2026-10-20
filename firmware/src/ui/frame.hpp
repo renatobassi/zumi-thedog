@@ -8,7 +8,7 @@
 
 static const int kZumiScreenW = 320;
 static const int kZumiScreenH = 240;
-static const int kZumiSpriteScale = 3;
+static const int kZumiSpriteScale = 2;
 static const int kZumiBarTrackPx = 59;
 static const int kZumiDockX = 4;
 static const int kZumiDockY = 188;

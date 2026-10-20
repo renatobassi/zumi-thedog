@@ -1,6 +1,6 @@
 # Identidade visual
 
-A tela do Zumi usa a arte da descoberta: o vira-lata caramelo da [folha de sprites](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667) e a paleta do [preview na resolução do CYD](https://skip-artifacts-snapshots.application.production.adapta.tools/user_3CDVTYlI0xg3W0mEhiEbBi4XVRf/4dsrp5jm6urgh3kgf3vuim4zza/revisions/3cb774c3-6168-4ac4-9cb6-53ce358664c7/index.html). O pixel que a placa desenha é o que está no repositório.
+A tela do Zumi usa a arte da descoberta: o vira-lata caramelo da [folha versionada](referencias/folha-zumi.jpg) e a paleta do [preview na resolução do CYD](https://skip-artifacts-snapshots.application.production.adapta.tools/user_3CDVTYlI0xg3W0mEhiEbBi4XVRf/4dsrp5jm6urgh3kgf3vuim4zza/revisions/3cb774c3-6168-4ac4-9cb6-53ce358664c7/index.html). O pixel que a placa desenha é o que está no repositório, amostrado da folha.
 
 Esta entrega veste o que os PRDs 0003 e 0004 já mostram. Não adiciona pose, animação nem cuidado novo.
 
@@ -20,9 +20,9 @@ O ouro é o das etiquetas da folha. O caramelo, o creme, a orelha e a tinta são
 
 ## Pose que entra agora
 
-A tela mostra o adulto sentado da folha: orelhas caídas, focinho e peito creme, olhos e nariz pretos, rabo ao lado. É a única pose versionada até o crescimento. Dormindo continua nela, enquanto não houver pose de sono.
+A tela mostra o adulto sentado da folha (EVOLUÇÃO → ADULTO NORMAL): orelha direita mais escura, focinho e peito creme, olhos e nariz pretos, rabo ao lado. O grid em `firmware/assets/sprites/build_manta.py` veio da folha, bloco a bloco. É a única pose versionada até o crescimento. Dormindo continua nela, enquanto não houver pose de sono.
 
-O desenho versionado está em `firmware/assets/sprites/build_manta.py` e o PNG ao lado. O cabeçalho que o firmware inclui sai desse script. No computador, `pio run -e preview` abre essa tela em 320×240.
+O PNG ao lado e o cabeçalho RGB565 saem desse script. No computador, `pio run -e preview` abre essa tela em 320×240.
 
 ## Tela 320×240
 
