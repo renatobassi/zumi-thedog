@@ -19,6 +19,14 @@ struct Bars {
   uint8_t hygiene;
 };
 
+// Resto da taxa por hora (barra * ms). Sem isso, o tick de 1 ms da placa arredonda a zero.
+struct BarCarry {
+  int32_t hunger;
+  int32_t energy;
+  int32_t fun;
+  int32_t hygiene;
+};
+
 struct PetSnapshot {
   Phase phase;
   Bars bars;
@@ -29,6 +37,7 @@ struct PetSnapshot {
   bool on_street;
   uint32_t low_ms;
   uint32_t sick_ms;
+  BarCarry bar_carry;
 };
 
 inline PetSnapshot pet_snapshot_newborn(uint32_t now_ms) {
@@ -45,5 +54,9 @@ inline PetSnapshot pet_snapshot_newborn(uint32_t now_ms) {
   snap.on_street = false;
   snap.low_ms = 0;
   snap.sick_ms = 0;
+  snap.bar_carry.hunger = 0;
+  snap.bar_carry.energy = 0;
+  snap.bar_carry.fun = 0;
+  snap.bar_carry.hygiene = 0;
   return snap;
 }

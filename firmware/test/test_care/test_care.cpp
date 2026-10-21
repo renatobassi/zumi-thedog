@@ -123,6 +123,28 @@ void test_time_after_waking_uses_awake_rates(void) {
   TEST_ASSERT_FALSE(pet.asleep);
 }
 
+void test_one_ms_ticks_match_one_hour(void) {
+  PetSnapshot chunk = pet_snapshot_newborn(0);
+  PetSnapshot ticks = pet_snapshot_newborn(0);
+  care_advance(chunk, kHourMs);
+  for (uint32_t i = 0; i < 3600u; ++i) {
+    care_advance(ticks, 1000u);
+  }
+  expect_bars(ticks, chunk.bars.hunger, chunk.bars.energy, chunk.bars.fun, chunk.bars.hygiene);
+  TEST_ASSERT_EQUAL_UINT32(chunk.age_ms, ticks.age_ms);
+}
+
+void test_one_ms_tick_eventually_drops_hunger(void) {
+  PetSnapshot pet = pet_snapshot_newborn(0);
+  const uint32_t ms_per_point = kHourMs / 8u;
+  for (uint32_t i = 0; i + 1u < ms_per_point; ++i) {
+    care_advance(pet, 1u);
+  }
+  TEST_ASSERT_EQUAL_UINT8(100, pet.bars.hunger);
+  care_advance(pet, 1u);
+  TEST_ASSERT_EQUAL_UINT8(99, pet.bars.hunger);
+}
+
 int main(int argc, char** argv) {
   (void)argc;
   (void)argv;
@@ -138,5 +160,7 @@ int main(int argc, char** argv) {
   RUN_TEST(test_sleep_and_wake_refuse_when_already_in_that_state);
   RUN_TEST(test_same_hour_twice_matches);
   RUN_TEST(test_time_after_waking_uses_awake_rates);
+  RUN_TEST(test_one_ms_ticks_match_one_hour);
+  RUN_TEST(test_one_ms_tick_eventually_drops_hunger);
   return UNITY_END();
 }
