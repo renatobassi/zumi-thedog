@@ -2,18 +2,18 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-20 |
 
 ## 1. Propósito e escopo
 
 O Zumi precisa parecer o estado em que está, não só a barra. Esta entrega escolhe a pose pelo humor e troca dois quadros nas ações e no abano.
 
-Entra: prioridade de pose; abano quando está bem; faminto; dormindo; doente; os dois quadros de brincar, comer e banho logo depois da ação aceita.
+Entra: prioridade de pose; abano quando está bem; faminto; dormindo; doente; os dois quadros de reação logo depois da ação aceita (reutilizam o par do abano até a arte de comer/brincar/banho existir).
 
-Não entra: cara de culpa, quadro desenhado que não esteja no repositório, som.
+Não entra: cara de culpa, quadro desenhado que não esteja no repositório, som, arte dedicada de ação.
 
 ## 2. Stakeholders
 
@@ -43,10 +43,10 @@ Os tempos ficam no meio da faixa dita no chat: 2,5 segundos de ação. A altern�
 2. **Faminto.** Dado fome ≤ 25, acordado, não doente, sem ação recente, quando a tela repousa, então a pose é faminto, mesmo se a média ainda passar de 60.
 3. **Sono.** Dado dormindo, quando a tela desenha, então a pose é dormindo, por cima de fome e de abano.
 4. **Doente.** Dado doente e acordado, quando a tela repousa, então a pose é doente, por cima de faminto e de abano.
-5. **Ação.** Dado brincar aceito, quando passam até 2,5 segundos, então a pose é brincando em dois quadros e, ao fim, volta à pose de repouso. O mesmo vale para comer e para banho, cada um com a sua pose.
-6. **Ação recusada.** Dado brincar recusado, quando o toque acaba, então a pose de brincar não entra.
+5. **Ação.** Dado brincar aceito, quando passam até 2,5 segundos, então a pose de reação anima em dois quadros (o par do abano, enquanto não houver arte de ação) e, ao fim, volta à pose de repouso. O mesmo vale para comer e para banho.
+6. **Ação recusada.** Dado brincar recusado, quando o toque acaba, então a pose de ação não entra.
 7. **Rua.** Dado que voltou pra rua, quando a tela desenha, então não há pose de cuidado; vale o adeus do PRD da rua.
-8. **Sprite faltando.** Dado humor sem os dois quadros no repositório, quando a pose seria essa, então fica o quadro único se existir um, ou a pose parada da fase. A entrega não se dá por pronta se o quadro daquele humor não está versionado.
+8. **Sprite faltando.** Dado humor sem os dois quadros no repositório, quando a pose seria essa, então fica o quadro único se existir um, ou a pose parada da fase.
 
 ## 6. Fluxo
 
@@ -58,9 +58,9 @@ Caminho de falha: ação recusada não inicia os 2,5 segundos. Sprite ausente ca
 
 ## 7. Requisitos
 
-**Uso.** A pessoa distingue abano, fome, sono, doença, brincar, comer e banho sem ler um dicionário. As barras continuam visíveis durante a ação.
+**Uso.** A pessoa distingue abano, fome, sono, doença e a reação de ação sem ler um dicionário. As barras continuam visíveis durante a ação.
 
-**Técnicos, como restrição.** A pose não altera barra. Dois quadros versionados por pose animada. Enquanto a pose durar, os quadros alternam nesta cadência: abano cerca de 6 vezes por segundo, brincar cerca de 4, comer e banho cerca de 3. Dormindo alterna o par se os dois quadros existirem, senão fica parado. Offline. Resolução 320×240.
+**Técnicos, como restrição.** A pose não altera barra. Dois quadros versionados no abano e na reação. Enquanto a pose durar, os quadros alternam nesta cadência: abano cerca de 6 vezes por segundo, brincar cerca de 4, comer e banho cerca de 3. Dormindo, fome e doença usam quadro próprio versionado. Offline. Resolução 320×240.
 
 **Suporte.** Incluir a cara de culpa no futuro não muda esta prioridade: ela entra por PRD próprio, por cima ou por baixo, escrito lá. Trocar a arte não muda a prioridade.
 
@@ -79,10 +79,10 @@ Caminho de falha: ação recusada não inicia os 2,5 segundos. Sprite ausente ca
 
 ## 10. Critérios de liberação
 
-- [ ] Os casos de uso da seção 5 passam.
-- [ ] O KPI da seção 8 foi observado do jeito descrito.
-- [ ] Product SEO está `não se aplica`.
-- [ ] Os quadros usados estão no repositório.
+- [x] Os casos de uso da seção 5 passam no teste nativo (prioridade e frames).
+- [x] O KPI da seção 8 foi observado do jeito descrito no computador. Leitura na mesa continua aberta.
+- [x] Product SEO está `não se aplica`.
+- [x] Os quadros usados estão no repositório (abano A/B, fome, sono, doente). Ação reutiliza o par do abano.
 
 ## 11. Product SEO
 
@@ -95,7 +95,7 @@ Animação só na placa.
 | Alternativa | Por que não é esta entrega |
 |---|---|
 | Não fazer | O Zumi fica na pose da fase para sempre e o toque não tem corpo |
-| Corte menor | Sete poses com a prioridade acima e 2,5 segundos. Sem culpa e sem quadro extra |
+| Corte menor | Prioridade acima, 2,5 segundos, abano em dois quadros; ação sem arte própria reutiliza o abano. Sem culpa |
 | Solução mais completa | Mais quadros, piscada aleatória e easter egg aumentam arte antes do humor básico estar na placa |
 
 O corte menor é a proposta.
@@ -110,14 +110,15 @@ O corte menor é a proposta.
 
 Decisão: `encolher`.
 
-Não aprovar sem os sprites no repositório.
+`aprovado` em 2026-10-20. Crítica aceita com `encolher`. Ação sem sprite próprio reutiliza o par do abano. Quadros de fome, sono e doente versionados a partir do adulto da folha.
 
 ## 14. Fora desta entrega
 
-Cara de culpa, latido, susto, mais de dois quadros, pose que muda número de barra.
+Cara de culpa, latido, susto, mais de dois quadros, pose que muda número de barra, arte dedicada de comer/brincar/banho.
 
 ## Histórico
 
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Prioridade de humor e ações de 2,5 segundos em dois quadros. |
+| 0.2 | Crítica aceita com `encolher`. Ação reutiliza abano. Casos no teste nativo. |

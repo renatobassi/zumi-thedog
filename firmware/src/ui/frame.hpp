@@ -2,9 +2,11 @@
 
 #include <stdint.h>
 
+#include "../domain/care.hpp"
+#include "../domain/mood.hpp"
 #include "../domain/pet_snapshot.hpp"
 
-// Mapa da tela do PRD 0003. Não desenha pixel e não altera o snapshot.
+// Mapa da tela do PRD 0003/0006. Não desenha pixel e não altera o snapshot.
 
 static const int kZumiScreenW = 320;
 static const int kZumiScreenH = 240;
@@ -17,7 +19,14 @@ static const int kZumiDockH = 48;
 static const int kZumiDockGap = 4;
 static const uint16_t kSpriteKey = 0xF81F;
 
-enum PoseId { POSE_NONE = 0, POSE_MANTA = 1, POSE_SLEEP = 2 };
+enum PoseId {
+  POSE_NONE = 0,
+  POSE_MANTA = 1,
+  POSE_SLEEP = 2,
+  POSE_WAG_B = 3,
+  POSE_HUNGRY = 4,
+  POSE_SICK = 5
+};
 
 struct SpriteView {
   const uint16_t* pixels;
@@ -51,8 +60,15 @@ struct CareTarget {
   int h;
 };
 
+struct MoodView {
+  CareAction action;
+  uint32_t action_until_ms;
+  uint32_t now_ms;
+};
+
 struct ZumiFrame {
   PoseId pose;
+  MoodId mood;
   int dog_x;
   int dog_y;
   int dog_w;
@@ -68,7 +84,9 @@ struct ZumiFrame {
 };
 
 bool pose_versioned(PoseId pose);
+PoseId pose_for_mood(MoodId mood, Phase phase, int frame);
 PoseId zumi_pose(Phase phase, bool asleep);
 int bar_fill_px(uint8_t value);
 ZumiFrame zumi_frame(const PetSnapshot& pet);
+ZumiFrame zumi_frame(const PetSnapshot& pet, const MoodView& mood);
 SpriteView sprite_view(PoseId pose);

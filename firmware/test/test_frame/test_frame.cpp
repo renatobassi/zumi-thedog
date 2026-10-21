@@ -98,17 +98,16 @@ void test_sleep_target_says_wake(void) {
   TEST_ASSERT_EQUAL_INT(TOUCH_SLEEP, frame.targets[2].action);
 }
 
-void test_sleep_without_sprite_keeps_phase_pose(void) {
+void test_sleep_uses_sleep_sprite(void) {
   PetSnapshot pet = pet_snapshot_newborn(0);
   pet.asleep = true;
-  TEST_ASSERT_FALSE(pose_versioned(POSE_SLEEP));
-  TEST_ASSERT_EQUAL_INT(POSE_MANTA, zumi_frame(pet).pose);
+  TEST_ASSERT_TRUE(pose_versioned(POSE_SLEEP));
+  TEST_ASSERT_EQUAL_INT(POSE_SLEEP, zumi_frame(pet).pose);
 
-  const SpriteView sprite = sprite_view(POSE_MANTA);
+  const SpriteView sprite = sprite_view(POSE_SLEEP);
   TEST_ASSERT_NOT_NULL(sprite.pixels);
   TEST_ASSERT_TRUE(sprite.width > 0);
   TEST_ASSERT_TRUE(sprite.height > 0);
-  TEST_ASSERT_EQUAL_INT(0, sprite_view(POSE_SLEEP).width);
   TEST_ASSERT_EQUAL_INT(0, sprite_view(POSE_NONE).width);
 }
 
@@ -121,6 +120,6 @@ int main(int argc, char** argv) {
   RUN_TEST(test_later_phase_falls_back_to_blanket);
   RUN_TEST(test_four_targets_sit_in_the_dock);
   RUN_TEST(test_sleep_target_says_wake);
-  RUN_TEST(test_sleep_without_sprite_keeps_phase_pose);
+  RUN_TEST(test_sleep_uses_sleep_sprite);
   return UNITY_END();
 }
