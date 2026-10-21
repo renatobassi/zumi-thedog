@@ -9,9 +9,12 @@ const char* kBarNames[4] = {"Fome", "Energia", "Diversao", "Higiene"};
 PoseId pose_for_phase(Phase phase) {
   switch (phase) {
   case PHASE_BLANKET:
+    // Até o filhote na manta existir no repo, a tela reutiliza o adulto versionado.
     return POSE_MANTA;
   case PHASE_PUPPY:
+    return POSE_NONE;
   case PHASE_ADULT_SITTING:
+    return POSE_MANTA;
   case PHASE_ADULT:
     return POSE_NONE;
   }

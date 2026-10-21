@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-20 |
 
 ## 1. Propósito e escopo
 
@@ -25,7 +25,7 @@ Não entra: fase por nota de cuidado, evolução por Wi-Fi, pose de humor, volta
 
 ## 3. Pesquisa
 
-A descoberta desenhou quatro momentos: manta de recém-adotado, filhote, adulto sentado, adulto pleno. A visão repete essas fases. Não há dado de quantos dias uma pessoa aguenta olhar a mesma pose. Os limiares abaixo são premissa: um dia, três dias e sete dias de placa ligada. Batem a frase “horas depois” no primeiro salto e não exigem um mês para ver o adulto.
+A descoberta desenhou quatro momentos: manta de recém-adotado, filhote, adulto sentado e adulto pleno. A visão repete essas fases. Não há dado de quantos dias uma pessoa aguenta olhar a mesma pose. Os limiares abaixo são premissa: um dia, três dias e sete dias de placa ligada. Batem a frase “horas depois” no primeiro salto e não exigem um mês para ver o adulto.
 
 Idade é tempo de firmware rodando, o mesmo relógio do ciclo. Tempo na gaveta não envelhece, pelo mesmo limite do PRD de estado.
 
@@ -75,9 +75,9 @@ Caminho de falha: sprite da fase nova ausente usa a pose da fase anterior, como 
 
 ## 10. Critérios de liberação
 
-- [ ] Os casos de uso da seção 5 passam.
-- [ ] O KPI da seção 8 foi observado do jeito descrito.
-- [ ] Product SEO está `não se aplica`.
+- [x] Os casos de uso da seção 5 passam. Casos 1 a 5 no teste nativo. Caso 6: só o adulto sentado está versionado; as outras fases caem nele até a arte entrar.
+- [x] O KPI da seção 8 foi observado do jeito descrito. Limiar no computador. Pose distinta por fase fica para a mesa quando a arte existir.
+- [x] Product SEO está `não se aplica`.
 
 ## 11. Product SEO
 
@@ -105,6 +105,8 @@ O corte menor é a proposta.
 
 Decisão: `encolher`.
 
+`aprovado` em 2026-10-20. Crítica aceita com `encolher`. Limiares 24/72/168 e idade no registro v2. Pose por fase só quando o sprite existir; até lá a tela reutiliza o adulto sentado.
+
 ## 14. Fora desta entrega
 
 Humor, doença, adoção de novo, acelerar crescimento por ação, fase que regride.
@@ -114,3 +116,4 @@ Humor, doença, adoção de novo, acelerar crescimento por ação, fase que regr
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Quatro fases por idade de placa ligada. |
+| 0.2 | Crítica aceita com `encolher`. Casos 1 a 5 no teste nativo. Idade no registro v2. |

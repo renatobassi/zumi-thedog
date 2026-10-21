@@ -1,5 +1,7 @@
 #include "record.hpp"
 
+#include "../domain/growth.hpp"
+
 namespace {
 
 constexpr uint8_t kMagic0 = 'Z';
@@ -7,8 +9,10 @@ constexpr uint8_t kMagic1 = 'U';
 constexpr uint8_t kMagic2 = 'M';
 constexpr uint8_t kMagic3 = 'I';
 constexpr uint8_t kVersion1 = 1;
+constexpr uint8_t kVersion2 = 2;
 constexpr size_t kHeader = 6;
 constexpr size_t kV1Payload = 10;
+constexpr size_t kV2Payload = 14;
 constexpr size_t kCrc = 2;
 
 uint16_t crc16(const uint8_t* data, size_t len) {
@@ -38,6 +42,20 @@ uint32_t read_u32(const uint8_t* src) {
          (static_cast<uint32_t>(src[2]) << 16) | (static_cast<uint32_t>(src[3]) << 24);
 }
 
+bool decode_v1_payload(const uint8_t* payload, PetSnapshot* snap) {
+  snap->phase = static_cast<Phase>(payload[0]);
+  snap->bars.hunger = payload[1];
+  snap->bars.energy = payload[2];
+  snap->bars.fun = payload[3];
+  snap->bars.hygiene = payload[4];
+  if (payload[5] > 1) {
+    return false;
+  }
+  snap->asleep = payload[5] == 1;
+  snap->last_tick_ms = read_u32(payload + 6);
+  return true;
+}
+
 }  // namespace
 
 bool pet_snapshot_can_persist(const PetSnapshot& snap) {
@@ -51,7 +69,7 @@ bool pet_snapshot_can_persist(const PetSnapshot& snap) {
 }
 
 bool pet_record_encode(const PetSnapshot& snap, uint8_t* dest, size_t cap, size_t* written) {
-  if (dest == nullptr || written == nullptr || cap < kPetRecordV1Size || !pet_snapshot_can_persist(snap)) {
+  if (dest == nullptr || written == nullptr || cap < kPetRecordV2Size || !pet_snapshot_can_persist(snap)) {
     return false;
   }
 
@@ -59,8 +77,8 @@ bool pet_record_encode(const PetSnapshot& snap, uint8_t* dest, size_t cap, size_
   dest[1] = kMagic1;
   dest[2] = kMagic2;
   dest[3] = kMagic3;
-  dest[4] = kVersion1;
-  dest[5] = static_cast<uint8_t>(kV1Payload);
+  dest[4] = kVersion2;
+  dest[5] = static_cast<uint8_t>(kV2Payload);
   dest[6] = static_cast<uint8_t>(snap.phase);
   dest[7] = snap.bars.hunger;
   dest[8] = snap.bars.energy;
@@ -68,11 +86,12 @@ bool pet_record_encode(const PetSnapshot& snap, uint8_t* dest, size_t cap, size_
   dest[10] = snap.bars.hygiene;
   dest[11] = snap.asleep ? 1 : 0;
   write_u32(dest + 12, snap.last_tick_ms);
+  write_u32(dest + 16, snap.age_ms);
 
-  const uint16_t crc = crc16(dest, kHeader + kV1Payload);
-  dest[16] = static_cast<uint8_t>(crc);
-  dest[17] = static_cast<uint8_t>(crc >> 8);
-  *written = kPetRecordV1Size;
+  const uint16_t crc = crc16(dest, kHeader + kV2Payload);
+  dest[20] = static_cast<uint8_t>(crc);
+  dest[21] = static_cast<uint8_t>(crc >> 8);
+  *written = kPetRecordV2Size;
   return true;
 }
 
@@ -98,23 +117,36 @@ bool pet_record_decode(const uint8_t* bytes, size_t len, PetSnapshot* out) {
     return false;
   }
 
-  // Valor inicial de cada campo. A versão só substitui o que ela conhece.
   PetSnapshot snap = pet_snapshot_newborn(0);
+  const uint8_t* payload = bytes + kHeader;
+
   if (version == kVersion1) {
     if (payload_len < kV1Payload) {
       return false;
     }
-    const uint8_t* payload = bytes + kHeader;
-    snap.phase = static_cast<Phase>(payload[0]);
-    snap.bars.hunger = payload[1];
-    snap.bars.energy = payload[2];
-    snap.bars.fun = payload[3];
-    snap.bars.hygiene = payload[4];
-    if (payload[5] > 1) {
+    if (!decode_v1_payload(payload, &snap)) {
       return false;
     }
-    snap.asleep = payload[5] == 1;
-    snap.last_tick_ms = read_u32(payload + 6);
+    snap.age_ms = 0;
+    snap.phase = PHASE_BLANKET;
+    if (!pet_snapshot_can_persist(snap)) {
+      return false;
+    }
+    *out = snap;
+    return true;
+  }
+
+  if (version == kVersion2) {
+    if (payload_len < kV2Payload) {
+      return false;
+    }
+    if (!decode_v1_payload(payload, &snap)) {
+      return false;
+    }
+    snap.age_ms = read_u32(payload + 10);
+    snap.phase = phase_for_age(snap.age_ms);
+    // A fase gravada pode divergir se os limiares mudarem; a idade manda.
+    (void)payload[0];
     if (!pet_snapshot_can_persist(snap)) {
       return false;
     }
