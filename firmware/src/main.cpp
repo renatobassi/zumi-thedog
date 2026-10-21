@@ -27,12 +27,13 @@ static void show_pet() {
 }
 
 static void log_pet() {
-  Serial.printf("zumi fome=%u energia=%u diversao=%u higiene=%u %s\n", g_pet.bars.hunger, g_pet.bars.energy,
-                g_pet.bars.fun, g_pet.bars.hygiene, g_pet.asleep ? "dormindo" : "acordado");
+  Serial.printf("zumi fome=%u energia=%u diversao=%u higiene=%u idade_h=%u fase=%u %s\n", g_pet.bars.hunger,
+                g_pet.bars.energy, g_pet.bars.fun, g_pet.bars.hygiene, g_pet.age_ms / (60u * 60u * 1000u),
+                static_cast<unsigned>(g_pet.phase), g_pet.asleep ? "dormindo" : "acordado");
 }
 
 static bool same_care(const PetSnapshot& a, const PetSnapshot& b) {
-  return a.phase == b.phase && a.asleep == b.asleep && a.bars.hunger == b.bars.hunger &&
+  return a.phase == b.phase && a.age_ms == b.age_ms && a.asleep == b.asleep && a.bars.hunger == b.bars.hunger &&
          a.bars.energy == b.bars.energy && a.bars.fun == b.bars.fun && a.bars.hygiene == b.bars.hygiene;
 }
 

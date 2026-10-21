@@ -77,6 +77,7 @@ void test_case_power_cut_keeps_awake_bars(void) {
   MemStore mem = {};
   PetStore store = mem_store(&mem);
   PetSnapshot pet = pet_with(40, 70, 55, 80, false);
+  pet.age_ms = 30u * kHourMs;
   pet.phase = PHASE_PUPPY;
   pet.last_tick_ms = 123456;
   TEST_ASSERT_TRUE(pet_commit(store, pet));
@@ -85,6 +86,7 @@ void test_case_power_cut_keeps_awake_bars(void) {
   expect_bars(restored, 40, 70, 55, 80);
   TEST_ASSERT_FALSE(restored.asleep);
   TEST_ASSERT_EQUAL(PHASE_PUPPY, restored.phase);
+  TEST_ASSERT_EQUAL_UINT32(30u * kHourMs, restored.age_ms);
   TEST_ASSERT_EQUAL_UINT32(50, restored.last_tick_ms);
 }
 
@@ -143,7 +145,7 @@ void test_case_invalid_record_is_newborn(void) {
 
 void test_flipped_byte_does_not_decode(void) {
   PetSnapshot pet = pet_with(40, 70, 55, 80, false);
-  uint8_t buf[kPetRecordV1Size];
+  uint8_t buf[kPetRecordV2Size];
   size_t written = 0;
   TEST_ASSERT_TRUE(pet_record_encode(pet, buf, sizeof buf, &written));
   buf[7] ^= 0x01;
@@ -154,7 +156,7 @@ void test_flipped_byte_does_not_decode(void) {
 
 void test_short_record_is_rejected(void) {
   PetSnapshot pet = pet_with(40, 70, 55, 80, true);
-  uint8_t buf[kPetRecordV1Size];
+  uint8_t buf[kPetRecordV2Size];
   size_t written = 0;
   TEST_ASSERT_TRUE(pet_record_encode(pet, buf, sizeof buf, &written));
 
@@ -164,7 +166,7 @@ void test_short_record_is_rejected(void) {
 
 void test_unknown_version_is_rejected(void) {
   PetSnapshot pet = pet_with(40, 70, 55, 80, false);
-  uint8_t buf[kPetRecordV1Size];
+  uint8_t buf[kPetRecordV2Size];
   size_t written = 0;
   TEST_ASSERT_TRUE(pet_record_encode(pet, buf, sizeof buf, &written));
   buf[4] = 99;
@@ -176,36 +178,35 @@ void test_unknown_version_is_rejected(void) {
   TEST_ASSERT_FALSE(pet_record_decode(buf, written, &out));
 }
 
-void test_v1_extra_tail_keeps_known_fields(void) {
-  uint8_t buf[20] = {};
+void test_v1_record_keeps_bars_and_resets_age(void) {
+  uint8_t buf[kPetRecordV1Size] = {};
   buf[0] = 'Z';
   buf[1] = 'U';
   buf[2] = 'M';
   buf[3] = 'I';
   buf[4] = 1;
-  buf[5] = 12;
+  buf[5] = 10;
   buf[6] = static_cast<uint8_t>(PHASE_ADULT);
   buf[7] = 40;
   buf[8] = 70;
   buf[9] = 55;
   buf[10] = 80;
   buf[11] = 0;
-  buf[16] = 0xAB;
-  buf[17] = 0xCD;
-  const uint16_t crc = crc16(buf, 18);
-  buf[18] = static_cast<uint8_t>(crc);
-  buf[19] = static_cast<uint8_t>(crc >> 8);
+  const uint16_t crc = crc16(buf, 16);
+  buf[16] = static_cast<uint8_t>(crc);
+  buf[17] = static_cast<uint8_t>(crc >> 8);
 
   PetSnapshot out;
   TEST_ASSERT_TRUE(pet_record_decode(buf, sizeof buf, &out));
   expect_bars(out, 40, 70, 55, 80);
-  TEST_ASSERT_EQUAL(PHASE_ADULT, out.phase);
+  TEST_ASSERT_EQUAL(PHASE_BLANKET, out.phase);
+  TEST_ASSERT_EQUAL_UINT32(0, out.age_ms);
   TEST_ASSERT_FALSE(out.asleep);
 }
 
 void test_bar_above_100_is_rejected(void) {
   PetSnapshot pet = pet_with(101, 70, 55, 80, false);
-  uint8_t buf[kPetRecordV1Size];
+  uint8_t buf[kPetRecordV2Size];
   size_t written = 0;
   TEST_ASSERT_FALSE(pet_record_encode(pet, buf, sizeof buf, &written));
 }
@@ -222,7 +223,7 @@ int main(int argc, char** argv) {
   RUN_TEST(test_flipped_byte_does_not_decode);
   RUN_TEST(test_short_record_is_rejected);
   RUN_TEST(test_unknown_version_is_rejected);
-  RUN_TEST(test_v1_extra_tail_keeps_known_fields);
+  RUN_TEST(test_v1_record_keeps_bars_and_resets_age);
   RUN_TEST(test_bar_above_100_is_rejected);
   return UNITY_END();
 }

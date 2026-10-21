@@ -5,13 +5,14 @@
 
 #include "../domain/pet_snapshot.hpp"
 
-// Registro versão 1, pouco endian, sem relógio de parede:
-//   Z U M I | versão | tamanho | fase, 4 barras, sono, last_tick_ms | crc16
+// Registro pouco endian, sem relógio de parede:
+//   Z U M I | versão | tamanho | payload | crc16
+// v1: fase, 4 barras, sono, last_tick_ms
+// v2: v1 + age_ms
 // A leitura começa no recém-nascido e só cobre os campos que a versão traz.
-// Campo que uma gravação antiga não tem fica no valor inicial. Registro curto,
-// crc errado ou versão desconhecida não vira estado pela metade.
 
 constexpr size_t kPetRecordV1Size = 18;
+constexpr size_t kPetRecordV2Size = 22;
 
 bool pet_snapshot_can_persist(const PetSnapshot& snap);
 

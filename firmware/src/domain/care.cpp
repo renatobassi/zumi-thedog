@@ -1,5 +1,7 @@
 #include "care.hpp"
 
+#include "growth.hpp"
+
 namespace {
 
 constexpr int kHourMs = 60 * 60 * 1000;
@@ -61,6 +63,30 @@ uint32_t ms_until_energy_full(uint8_t energy) {
   return missing * static_cast<uint32_t>(kHourMs) / static_cast<uint32_t>(kAsleepEnergy);
 }
 
+void advance_bars(PetSnapshot& pet, uint32_t elapsed_ms) {
+  if (pet.asleep && pet.bars.energy >= 100) {
+    pet.asleep = false;
+  }
+  if (!pet.asleep) {
+    apply_awake(pet.bars, elapsed_ms);
+    return;
+  }
+
+  const uint32_t until_full = ms_until_energy_full(pet.bars.energy);
+  if (elapsed_ms < until_full) {
+    apply_asleep(pet.bars, elapsed_ms);
+    if (pet.bars.energy >= 100) {
+      pet.asleep = false;
+    }
+    return;
+  }
+
+  apply_asleep(pet.bars, until_full);
+  pet.bars.energy = 100;
+  pet.asleep = false;
+  advance_bars(pet, elapsed_ms - until_full);
+}
+
 }  // namespace
 
 bool care_apply(PetSnapshot& pet, CareAction action) {
@@ -102,25 +128,6 @@ bool care_apply(PetSnapshot& pet, CareAction action) {
 }
 
 void care_advance(PetSnapshot& pet, uint32_t elapsed_ms) {
-  if (pet.asleep && pet.bars.energy >= 100) {
-    pet.asleep = false;
-  }
-  if (!pet.asleep) {
-    apply_awake(pet.bars, elapsed_ms);
-    return;
-  }
-
-  const uint32_t until_full = ms_until_energy_full(pet.bars.energy);
-  if (elapsed_ms < until_full) {
-    apply_asleep(pet.bars, elapsed_ms);
-    if (pet.bars.energy >= 100) {
-      pet.asleep = false;
-    }
-    return;
-  }
-
-  apply_asleep(pet.bars, until_full);
-  pet.bars.energy = 100;
-  pet.asleep = false;
-  care_advance(pet, elapsed_ms - until_full);
+  growth_advance(pet, elapsed_ms);
+  advance_bars(pet, elapsed_ms);
 }
