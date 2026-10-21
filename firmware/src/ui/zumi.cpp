@@ -99,17 +99,24 @@ int label_width(const char* label) {
   if (strcmp(label, "Acordar") == 0) {
     return 48;
   }
+  if (strcmp(label, "Adotar") == 0) {
+    return 42;
+  }
   return 36;
 }
 
-void paint_target(const Display& display, const CareTarget& target, const BarView& bar, int track_h) {
+void paint_target(const Display& display, const CareTarget& target, const BarView* bar, int track_h) {
   display.fill_rect(target.x, target.y, target.w, target.h, COLOR_GOLD);
   display.fill_rect(target.x + 2, target.y + 2, target.w - 4, target.h - 4, COLOR_INK);
-  paint_icon(display, target.action, target.x + (target.w - 12) / 2, target.y + 4);
+  if (target.action != TOUCH_ADOPT) {
+    paint_icon(display, target.action, target.x + (target.w - 12) / 2, target.y + 4);
+  }
   display.text(target.label, target.x + (target.w - label_width(target.label)) / 2, target.y + 16, 2, COLOR_CREAM);
-  display.fill_rect(bar.x, bar.y, kZumiBarTrackPx, track_h, COLOR_BLACK);
-  if (bar.fill_px > 0) {
-    display.fill_rect(bar.x, bar.y, bar.fill_px, track_h, COLOR_CARAMEL);
+  if (bar != 0) {
+    display.fill_rect(bar->x, bar->y, kZumiBarTrackPx, track_h, COLOR_BLACK);
+    if (bar->fill_px > 0) {
+      display.fill_rect(bar->x, bar->y, bar->fill_px, track_h, COLOR_CARAMEL);
+    }
   }
 }
 
@@ -124,11 +131,16 @@ void zumi_show(const Display& display, const PetSnapshot& pet, const char* notic
     display.sprite(frame.dog_x, frame.dog_y, sprite.width, sprite.height, sprite.pixels, kZumiSpriteScale, kSpriteKey);
   }
 
-  if (notice != 0 && notice[0] != '\0') {
-    display.text(notice, frame.notice_x, frame.notice_y, 2, COLOR_GOLD);
+  const char* line = notice;
+  if ((line == 0 || line[0] == '\0') && frame.status != 0) {
+    line = frame.status;
+  }
+  if (line != 0 && line[0] != '\0') {
+    display.text(line, frame.notice_x, frame.notice_y, 2, COLOR_GOLD);
   }
 
-  for (int i = 0; i < 4; ++i) {
-    paint_target(display, frame.targets[i], frame.bars[i], frame.track_h);
+  for (int i = 0; i < frame.target_count; ++i) {
+    const BarView* bar = (frame.targets[i].action == TOUCH_ADOPT) ? 0 : &frame.bars[i];
+    paint_target(display, frame.targets[i], bar, frame.track_h);
   }
 }

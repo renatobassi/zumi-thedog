@@ -9,7 +9,7 @@ bool inside(const CareTarget& target, int x, int y) {
 }
 
 TouchAction hit_action(const ZumiFrame& frame, int x, int y) {
-  for (int i = 0; i < 4; ++i) {
+  for (int i = 0; i < frame.target_count; ++i) {
     if (inside(frame.targets[i], x, y)) {
       return frame.targets[i].action;
     }
@@ -27,16 +27,24 @@ CareAction care_for(TouchAction touch, bool asleep) {
     return CARE_BATHE;
   case TOUCH_SLEEP:
     return asleep ? CARE_WAKE : CARE_SLEEP;
+  case TOUCH_ADOPT:
+    return CARE_ADOPT;
   case TOUCH_NONE:
     break;
   }
   return CARE_FEED;
 }
 
-const char* notice_for(TouchAction touch, bool was_asleep, bool accepted) {
+const char* notice_for(TouchAction touch, bool was_asleep, bool accepted, bool was_sick) {
+  if (touch == TOUCH_ADOPT) {
+    return accepted ? "Adotou" : 0;
+  }
   if (!accepted) {
     if (was_asleep) {
       return "Esta dormindo";
+    }
+    if (was_sick && touch == TOUCH_PLAY) {
+      return "Esta doente";
     }
     return "Nao brincou";
   }
@@ -49,6 +57,7 @@ const char* notice_for(TouchAction touch, bool was_asleep, bool accepted) {
     return "Banhou";
   case TOUCH_SLEEP:
     return was_asleep ? "Acordou" : "Dormiu";
+  case TOUCH_ADOPT:
   case TOUCH_NONE:
     break;
   }
@@ -69,9 +78,10 @@ TouchOutcome touch_at(PetSnapshot& pet, int x, int y) {
   }
 
   const bool was_asleep = pet.asleep;
+  const bool was_sick = pet.sick;
   outcome.attempted = true;
   outcome.accepted = care_apply(pet, care_for(touch, was_asleep));
-  outcome.notice = notice_for(touch, was_asleep, outcome.accepted);
+  outcome.notice = notice_for(touch, was_asleep, outcome.accepted, was_sick);
   return outcome;
 }
 

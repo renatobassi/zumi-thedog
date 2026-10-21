@@ -9,7 +9,8 @@ enum CareAction {
   CARE_PLAY = 1,
   CARE_BATHE = 2,
   CARE_SLEEP = 3,
-  CARE_WAKE = 4
+  CARE_WAKE = 4,
+  CARE_ADOPT = 5
 };
 
 // true quando a ação altera o estado. Recusa deixa barras e sono como estavam.

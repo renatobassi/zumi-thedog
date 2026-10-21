@@ -27,14 +27,24 @@ static void show_pet() {
 }
 
 static void log_pet() {
+  const char* mood = "acordado";
+  if (g_pet.on_street) {
+    mood = "rua";
+  } else if (g_pet.sick) {
+    mood = "doente";
+  } else if (g_pet.asleep) {
+    mood = "dormindo";
+  }
   Serial.printf("zumi fome=%u energia=%u diversao=%u higiene=%u idade_h=%u fase=%u %s\n", g_pet.bars.hunger,
                 g_pet.bars.energy, g_pet.bars.fun, g_pet.bars.hygiene, g_pet.age_ms / (60u * 60u * 1000u),
-                static_cast<unsigned>(g_pet.phase), g_pet.asleep ? "dormindo" : "acordado");
+                static_cast<unsigned>(g_pet.phase), mood);
 }
 
 static bool same_care(const PetSnapshot& a, const PetSnapshot& b) {
-  return a.phase == b.phase && a.age_ms == b.age_ms && a.asleep == b.asleep && a.bars.hunger == b.bars.hunger &&
-         a.bars.energy == b.bars.energy && a.bars.fun == b.bars.fun && a.bars.hygiene == b.bars.hygiene;
+  return a.phase == b.phase && a.age_ms == b.age_ms && a.asleep == b.asleep && a.sick == b.sick &&
+         a.on_street == b.on_street && a.low_ms == b.low_ms && a.sick_ms == b.sick_ms &&
+         a.bars.hunger == b.bars.hunger && a.bars.energy == b.bars.energy && a.bars.fun == b.bars.fun &&
+         a.bars.hygiene == b.bars.hygiene;
 }
 
 static void apply_estado(const char* line) {
@@ -105,8 +115,13 @@ static void apply_touch(uint32_t now) {
   }
 
   care_notice_show(g_notice, outcome.notice, now);
-  if (outcome.accepted && !pet_commit(g_store, g_pet)) {
-    Serial.println("zumi gravacao falhou");
+  if (outcome.accepted) {
+    if (outcome.notice != 0 && strcmp(outcome.notice, "Adotou") == 0) {
+      g_pet.last_tick_ms = now;
+    }
+    if (!pet_commit(g_store, g_pet)) {
+      Serial.println("zumi gravacao falhou");
+    }
   }
   Serial.println(outcome.notice);
   log_pet();

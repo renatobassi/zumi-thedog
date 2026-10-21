@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 // Contrato do Zumi entre regra, tela e gravação.
-// O ciclo de cuidado mora em care.hpp. A idade e a fase moram em growth.hpp.
+// Cuidado: care.hpp. Idade: growth.hpp. Doença e rua: health.hpp.
 
 enum Phase {
   PHASE_BLANKET = 0,
@@ -25,6 +25,10 @@ struct PetSnapshot {
   bool asleep;
   uint32_t last_tick_ms;
   uint32_t age_ms;
+  bool sick;
+  bool on_street;
+  uint32_t low_ms;
+  uint32_t sick_ms;
 };
 
 inline PetSnapshot pet_snapshot_newborn(uint32_t now_ms) {
@@ -37,5 +41,9 @@ inline PetSnapshot pet_snapshot_newborn(uint32_t now_ms) {
   snap.asleep = false;
   snap.last_tick_ms = now_ms;
   snap.age_ms = 0;
+  snap.sick = false;
+  snap.on_street = false;
+  snap.low_ms = 0;
+  snap.sick_ms = 0;
   return snap;
 }
