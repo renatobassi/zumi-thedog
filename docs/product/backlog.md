@@ -2,12 +2,12 @@
 
 Fila de produto. O detalhe está no PRD. Status de código segue o status do arquivo: só `aprovado` libera branch de firmware.
 
-O 0000–0007 da fila ativa estão `aprovado`. O 0000 está entregue na placa. O 0001–0007 passam no teste nativo (com lacunas de mesa nos 0002–0004 e sprite por fase no 0005). A [identidade visual](identidade-visual.md) veste a tela. O 0006 anima abano e humor no computador.
+O 0000–0007 da fila ativa estão `aprovado`. O 0000 está entregue na placa. O 0001–0007 passam no teste nativo (com lacunas de mesa nos 0002–0004 e sprite por fase no 0005). Em 2026-10-20 o decaimento do 0001 passou a valer no tick de 1 ms da placa. A [identidade visual](identidade-visual.md) veste a tela. O 0006 anima abano e humor no computador.
 
 | Ordem | PRD | Entrega | Depende de | Decisão | Código |
 |---|---|---|---|---|---|
 | 1 | [0000](prds/0000-hello-na-placa.md) | Placa reconhecida e Hello na tela | — | seguir | entregue: Hello visto na placa |
-| 2 | [0001](prds/0001-ciclo-de-cuidado.md) | Barras, sono e ações no tempo ligado | — | seguir | entregue: oito casos no teste nativo |
+| 2 | [0001](prds/0001-ciclo-de-cuidado.md) | Barras, sono e ações no tempo ligado | — | seguir | entregue no teste nativo; decaimento no tick de 1 ms (2026-10-20) |
 | 3 | [0002](prds/0002-estado-na-placa.md) | O ciclo sobrevive a desligar | 0001 | seguir | entregue no teste nativo; flash no firmware; falta ver o corte da USB |
 | 4 | [0003](prds/0003-zumi-na-tela.md) | Zumi e barras na tela 320×240 | 0000, 0001, sprites no repo | encolher | entregue no teste nativo; adulto da folha e cômodo na identidade; falta reconhecer na placa |
 | 5 | [0004](prds/0004-cuidado-pelo-toque.md) | Quatro cuidados pelo toque | 0001, 0003 | seguir | entregue no teste nativo; faixa da identidade visual; falta acertar na placa |
@@ -22,15 +22,16 @@ O 0000–0007 da fila ativa estão `aprovado`. O 0000 está entregue na placa. O
 ## Como sair da crítica
 
 1. ~~Começar pelo Hello na placa.~~ Feito.
-2. ~~Ciclo de cuidado.~~ Feito em 2026-10-05, com a tabela 0.1. Se a tabela mudar, a versão do 0001 sobe e os casos acompanham.
+2. ~~Ciclo de cuidado.~~ Feito em 2026-10-05, com a tabela 0.1. Em 2026-10-20 o resto da taxa faz o decaimento no tick da placa. Se a tabela mudar, a versão do 0001 sobe e os casos acompanham.
 3. ~~Estado na placa.~~ Feito em 2026-10-05 no computador. O firmware grava na flash. O corte da USB ainda precisa ser visto na mesa.
 4. ~~Zumi na tela.~~ Feito em 2026-10-05 no computador. Em 2026-10-06 entrou a [identidade visual](identidade-visual.md); em 2026-10-20 o sprite passou a ser o adulto da folha. O reconhecimento na placa ainda precisa ser visto na mesa.
 5. ~~Cuidado pelo toque.~~ Feito em 2026-10-05 no computador. Os casos 1 a 6 passam com toque simulado. A faixa de cuidados da identidade é o alvo. A mesa ainda precisa ver o dedo acertar.
 6. ~~Crescimento.~~ Feito em 2026-10-20 no computador. Idade e fase nos limiares; registro v2. Sprite por fase ainda falta.
 7. ~~Doença e a rua.~~ Feito em 2026-10-20 no computador. Casos 1 a 6; registro v3; Adeus e Adotar na tela.
 8. ~~Humor e poses.~~ Feito em 2026-10-20 no computador. Prioridade, abano em dois quadros; ação reutiliza o abano.
-9. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
-10. Aí sim a branch de código, uma por PRD.
+9. ~~Decaimento no tick da placa.~~ Feito em 2026-10-20: resto da taxa por barra; 1 ms deixa de zerar o ciclo.
+10. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
+11. Aí sim a branch de código, uma por PRD.
 
 ## Premissas que a aprovação do 0001 trava
 

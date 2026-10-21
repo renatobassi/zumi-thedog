@@ -4,7 +4,7 @@ O Zumi da descoberta é um cachorro caramelo que vive na placa. Este mapa ordena
 
 A descoberta está no [chat compartilhado](https://agent.adapta.one/shared-chat/01a0c706-c54c-731d-81a3-0d01ff7a4667). A [visão](vision.md) já recusou voz, microfone, alto-falante, ESP32-S3, aplicativo e rede. O chat não substitui estes PRDs.
 
-O loop 0000–0007 da fila ativa está `aprovado`. O Hello já está na placa. O ciclo passa no computador e o firmware grava esse estado na flash. O corte da USB do 0002 ainda não foi visto na mesa. A [identidade visual](identidade-visual.md) veste a tela; o humor escolhe abano, fome, sono e doente. Sprite próprio por fase de crescimento ainda falta. Reconhecer o caramelo e acertar os alvos na mesa ainda são os passos do 0003 e do 0004. A fila ativa desta leva acabou; o que está [parado](#parado--especificado-para-não-entrar-no-código) continua adiado. Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
+O loop 0000–0007 da fila ativa está `aprovado`. O Hello já está na placa. O ciclo passa no computador e o firmware grava esse estado na flash. Em 2026-10-20 o decaimento das barras passou a sobreviver ao tick de 1 ms da placa (resto da taxa por hora). O corte da USB do 0002 ainda não foi visto na mesa. A [identidade visual](identidade-visual.md) veste a tela; o humor escolhe abano, fome, sono e doente. Sprite próprio por fase de crescimento ainda falta. Reconhecer o caramelo e acertar os alvos na mesa ainda são os passos do 0003 e do 0004. A fila ativa desta leva acabou; o que está [parado](#parado--especificado-para-não-entrar-no-código) continua adiado. Nos outros, a crítica recomenda a decisão. Código só começa no arquivo que passar a `aprovado`, um PRD por branch.
 
 ## Agora — o bichinho na mesa
 
@@ -13,7 +13,7 @@ A placa fica ligada na tomada. O dono cuida pelo toque e, horas depois, vê outr
 Ordem, cada marco demonstrável sozinho:
 
 1. ~~[Hello na placa](prds/0000-hello-na-placa.md)~~ — feito em 2026-10-05: o firmware do repositório grava no CYD e a tela mostra “Ola!”. Sem Zumi.
-2. ~~[Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md)~~ — feito em 2026-10-05: barras, sono e quatro ações passam no computador. A placa ainda mostra o Hello.
+2. ~~[Ciclo de cuidado](prds/0001-ciclo-de-cuidado.md)~~ — feito em 2026-10-05: barras, sono e quatro ações passam no computador. Em 2026-10-20 o resto da taxa faz o decaimento valer no tick de 1 ms da placa.
 3. ~~[Estado na placa](prds/0002-estado-na-placa.md)~~ — feito em 2026-10-05 no computador: gravar, ler e nascer de novo passam com armazenamento falso. O tempo desligado não mexe nas barras. O firmware da placa grava o ciclo na flash e o serial mostra os números; confirmar desligando a USB ainda é o passo na mesa. A tela continua o Hello.
 4. ~~[Zumi na tela](prds/0003-zumi-na-tela.md)~~ — feito em 2026-10-05 no computador: as quatro barras com nome passam no teste. Em 2026-10-06 a tela ganhou o cômodo e a paleta da [identidade visual](identidade-visual.md); em 2026-10-20 o sprite virou o adulto sentado da folha, bloco a bloco. Sem pose de sono, dormindo reutiliza esse adulto. As outras fases da folha ficam para o crescimento. Reconhecer o caramelo na placa ainda é o passo na mesa.
 5. ~~[Cuidado pelo toque](prds/0004-cuidado-pelo-toque.md)~~ — feito em 2026-10-05 no computador: os quatro alvos disparam o ciclo, a recusa aparece e o toque fora não muda nada. Dormir vira Acordar. Segurar o dedo não repete. A faixa de cuidados da identidade visual é o alvo. Acertar isso na placa ainda é o passo na mesa.
@@ -22,6 +22,12 @@ Ordem, cada marco demonstrável sozinho:
 8. ~~[Humor e poses](prds/0006-humor-e-poses.md)~~ — feito em 2026-10-20 no computador: prioridade de humor, abano em dois quadros, fome/sono/doente versionados; ação de 2,5 s reutiliza o abano. Leitura na mesa ainda aberta.
 
 O 0006 vem depois do 0007 de propósito: a regra de abandono existe antes da animação. Na tela, a doença pode aparecer como estado escrito até a pose existir.
+
+## Mesa — o que ainda falta ver na placa
+
+- Corte da USB (0002): desligar e ligar mantém o estado.
+- Reconhecer o caramelo (0003) e acertar os quatro cuidados (0004).
+- Sprite por fase no crescimento (0005); adeus e humor lidos sem quem programou (0007, 0006).
 
 ## Parado — especificado para não entrar no código
 
