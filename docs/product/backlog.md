@@ -2,7 +2,7 @@
 
 Fila de produto. O detalhe está no PRD. Status de código segue o status do arquivo: só `aprovado` libera branch de firmware.
 
-O 0000, o 0001, o 0002, o 0003, o 0004, o 0005 e o 0007 estão `aprovado`. O 0000 está entregue na placa. O 0001 está entregue no teste nativo. O 0002 está entregue no teste nativo e no firmware da flash; o corte da USB ainda não foi visto na mesa. O 0003 desenha o adulto da folha, o cômodo e as barras no teste nativo e no preview; o reconhecimento na placa ainda não foi visto na mesa. O 0004 dispara os quatro cuidados no teste nativo; acertar os alvos na placa ainda não foi visto na mesa. O 0005 avança idade e fase no teste nativo; sprite por fase ainda falta. O 0007 cobre doente, rua e adoção no teste nativo. A [identidade visual](identidade-visual.md) já veste o 0003 e o 0004. O 0006 está `em crítica`.
+O 0000–0007 da fila ativa estão `aprovado`. O 0000 está entregue na placa. O 0001–0007 passam no teste nativo (com lacunas de mesa nos 0002–0004 e sprite por fase no 0005). A [identidade visual](identidade-visual.md) veste a tela. O 0006 anima abano e humor no computador.
 
 | Ordem | PRD | Entrega | Depende de | Decisão | Código |
 |---|---|---|---|---|---|
@@ -13,7 +13,7 @@ O 0000, o 0001, o 0002, o 0003, o 0004, o 0005 e o 0007 estão `aprovado`. O 000
 | 5 | [0004](prds/0004-cuidado-pelo-toque.md) | Quatro cuidados pelo toque | 0001, 0003 | seguir | entregue no teste nativo; faixa da identidade visual; falta acertar na placa |
 | 6 | [0005](prds/0005-crescimento.md) | Quatro fases pela idade ligada | 0001, 0002, 0003 | encolher | entregue no teste nativo; falta sprite por fase na placa |
 | 7 | [0007](prds/0007-doenca-e-a-rua.md) | Doente e volta pra rua | 0001, 0002, 0004 | seguir | entregue no teste nativo; falta ler adeus na placa |
-| 8 | [0006](prds/0006-humor-e-poses.md) | Pose e animação curta | 0003, 0004, 0005, 0007, sprites | encolher | espera arte e aprovação |
+| 8 | [0006](prds/0006-humor-e-poses.md) | Pose e animação curta | 0003, 0004, 0005, 0007, sprites | encolher | entregue no teste nativo; falta ler na placa |
 | — | [0008](prds/0008-cara-de-culpa.md) | Cara de culpa | loop na mesa | adiar | não abre |
 | — | [0009](prds/0009-susto-com-barulho.md) | Susto com barulho alto | hardware de áudio | adiar | não abre |
 | — | [0010](prds/0010-voz-e-latido.md) | “Passear” falado e latido | outro hardware ou rede | adiar | não abre |
@@ -28,8 +28,9 @@ O 0000, o 0001, o 0002, o 0003, o 0004, o 0005 e o 0007 estão `aprovado`. O 000
 5. ~~Cuidado pelo toque.~~ Feito em 2026-10-05 no computador. Os casos 1 a 6 passam com toque simulado. A faixa de cuidados da identidade é o alvo. A mesa ainda precisa ver o dedo acertar.
 6. ~~Crescimento.~~ Feito em 2026-10-20 no computador. Idade e fase nos limiares; registro v2. Sprite por fase ainda falta.
 7. ~~Doença e a rua.~~ Feito em 2026-10-20 no computador. Casos 1 a 6; registro v3; Adeus e Adotar na tela.
-8. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
-9. Aí sim a branch de código, uma por PRD.
+8. ~~Humor e poses.~~ Feito em 2026-10-20 no computador. Prioridade, abano em dois quadros; ação reutiliza o abano.
+9. Trocar o status para `aprovado` só com a decisão `seguir` ou `encolher` já reescrita no corpo.
+10. Aí sim a branch de código, uma por PRD.
 
 ## Premissas que a aprovação do 0001 trava
 

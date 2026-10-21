@@ -2,6 +2,7 @@
 
 #include <string.h>
 
+#include "../domain/care.hpp"
 #include "frame.hpp"
 
 namespace {
@@ -123,7 +124,15 @@ void paint_target(const Display& display, const CareTarget& target, const BarVie
 }  // namespace
 
 void zumi_show(const Display& display, const PetSnapshot& pet, const char* notice) {
-  const ZumiFrame frame = zumi_frame(pet);
+  MoodView mood;
+  mood.action = CARE_FEED;
+  mood.action_until_ms = 0;
+  mood.now_ms = 0;
+  zumi_show(display, pet, notice, mood);
+}
+
+void zumi_show(const Display& display, const PetSnapshot& pet, const char* notice, const MoodView& mood) {
+  const ZumiFrame frame = zumi_frame(pet, mood);
   paint_room(display);
 
   const SpriteView sprite = sprite_view(frame.pose);

@@ -1,6 +1,10 @@
 #include "frame.hpp"
 
+#include "hungry_pixels.hpp"
 #include "manta_pixels.hpp"
+#include "sick_pixels.hpp"
+#include "sleep_pixels.hpp"
+#include "wag_b_pixels.hpp"
 
 namespace {
 
@@ -9,7 +13,6 @@ const char* kBarNames[4] = {"Fome", "Energia", "Diversao", "Higiene"};
 PoseId pose_for_phase(Phase phase) {
   switch (phase) {
   case PHASE_BLANKET:
-    // Até o filhote na manta existir no repo, a tela reutiliza o adulto versionado.
     return POSE_MANTA;
   case PHASE_PUPPY:
     return POSE_NONE;
@@ -21,17 +24,7 @@ PoseId pose_for_phase(Phase phase) {
   return POSE_NONE;
 }
 
-}  // namespace
-
-bool pose_versioned(PoseId pose) {
-  return pose == POSE_MANTA;
-}
-
-PoseId zumi_pose(Phase phase, bool asleep) {
-  if (asleep && pose_versioned(POSE_SLEEP)) {
-    return POSE_SLEEP;
-  }
-
+PoseId fallback_phase_pose(Phase phase) {
   Phase current = phase;
   for (;;) {
     const PoseId pose = pose_for_phase(current);
@@ -43,6 +36,44 @@ PoseId zumi_pose(Phase phase, bool asleep) {
     }
     current = static_cast<Phase>(static_cast<int>(current) - 1);
   }
+}
+
+}  // namespace
+
+bool pose_versioned(PoseId pose) {
+  return pose == POSE_MANTA || pose == POSE_WAG_B || pose == POSE_SLEEP || pose == POSE_HUNGRY || pose == POSE_SICK;
+}
+
+PoseId pose_for_mood(MoodId mood, Phase phase, int frame) {
+  const PoseId phase_pose = fallback_phase_pose(phase);
+  switch (mood) {
+  case MOOD_STREET:
+    return POSE_NONE;
+  case MOOD_SLEEP:
+    return pose_versioned(POSE_SLEEP) ? POSE_SLEEP : phase_pose;
+  case MOOD_SICK:
+    return pose_versioned(POSE_SICK) ? POSE_SICK : phase_pose;
+  case MOOD_HUNGRY:
+    return pose_versioned(POSE_HUNGRY) ? POSE_HUNGRY : phase_pose;
+  case MOOD_WAG:
+  case MOOD_ACTION_FEED:
+  case MOOD_ACTION_PLAY:
+  case MOOD_ACTION_BATH:
+    if (frame == 1 && pose_versioned(POSE_WAG_B)) {
+      return POSE_WAG_B;
+    }
+    return phase_pose;
+  case MOOD_PHASE:
+    return phase_pose;
+  }
+  return phase_pose;
+}
+
+PoseId zumi_pose(Phase phase, bool asleep) {
+  PetSnapshot pet = pet_snapshot_newborn(0);
+  pet.phase = phase;
+  pet.asleep = asleep;
+  return pose_for_mood(mood_choose(pet, CARE_FEED, false), phase, 0);
 }
 
 int bar_fill_px(uint8_t value) {
@@ -58,6 +89,22 @@ SpriteView sprite_view(PoseId pose) {
     view.pixels = kMantaPixels;
     view.width = kMantaWidth;
     view.height = kMantaHeight;
+  } else if (pose == POSE_WAG_B) {
+    view.pixels = kWagBPixels;
+    view.width = kWagBWidth;
+    view.height = kWagBHeight;
+  } else if (pose == POSE_SLEEP) {
+    view.pixels = kSleepPixels;
+    view.width = kSleepWidth;
+    view.height = kSleepHeight;
+  } else if (pose == POSE_HUNGRY) {
+    view.pixels = kHungryPixels;
+    view.width = kHungryWidth;
+    view.height = kHungryHeight;
+  } else if (pose == POSE_SICK) {
+    view.pixels = kSickPixels;
+    view.width = kSickWidth;
+    view.height = kSickHeight;
   }
   return view;
 }
@@ -66,12 +113,23 @@ const TouchAction kCareActions[4] = {TOUCH_FEED, TOUCH_PLAY, TOUCH_SLEEP, TOUCH_
 const char* kCareAwake[4] = {"Comer", "Brincar", "Dormir", "Banho"};
 
 ZumiFrame zumi_frame(const PetSnapshot& pet) {
+  MoodView mood;
+  mood.action = CARE_FEED;
+  mood.action_until_ms = 0;
+  mood.now_ms = 0;
+  return zumi_frame(pet, mood);
+}
+
+ZumiFrame zumi_frame(const PetSnapshot& pet, const MoodView& mood_view) {
   ZumiFrame frame;
-  frame.pose = pet.on_street ? POSE_NONE : zumi_pose(pet.phase, pet.asleep);
+  const bool action_live = mood_view.now_ms < mood_view.action_until_ms;
+  frame.mood = mood_choose(pet, mood_view.action, action_live);
+  const int frame_i = mood_frame_index(frame.mood, mood_view.now_ms);
+  frame.pose = pose_for_mood(frame.mood, pet.phase, frame_i);
   frame.status = 0;
   if (pet.on_street) {
     frame.status = "Voltou pra rua";
-  } else if (pet.sick) {
+  } else if (pet.sick && frame.mood == MOOD_SICK) {
     frame.status = "Doente";
   }
 

@@ -4,11 +4,13 @@
 #include <string.h>
 
 #include "domain/care.hpp"
+#include "domain/mood.hpp"
 #include "domain/pet_snapshot.hpp"
 #include "hal/display.hpp"
 #include "hal/touch.hpp"
 #include "persistence/boot.hpp"
 #include "persistence/nvs_store.hpp"
+#include "ui/frame.hpp"
 #include "ui/screen.hpp"
 #include "ui/zumi.hpp"
 
@@ -19,11 +21,24 @@ static PetStore g_store;
 static TouchLatch g_latch = {false, 0};
 static CareNotice g_notice = {0, 0};
 static bool g_notice_drawn = false;
+static CareAction g_action = CARE_FEED;
+static uint32_t g_action_until_ms = 0;
+static int g_last_mood_frame = -1;
+
+static MoodView current_mood(uint32_t now) {
+  MoodView mood;
+  mood.action = g_action;
+  mood.action_until_ms = g_action_until_ms;
+  mood.now_ms = now;
+  return mood;
+}
 
 static void show_pet() {
-  const char* notice = care_notice_text(g_notice, millis());
-  zumi_show(cyd_display(), g_pet, notice);
+  const uint32_t now = millis();
+  const char* notice = care_notice_text(g_notice, now);
+  zumi_show(cyd_display(), g_pet, notice, current_mood(now));
   g_notice_drawn = notice != 0;
+  g_last_mood_frame = mood_frame_index(mood_choose(g_pet, g_action, now < g_action_until_ms), now);
 }
 
 static void log_pet() {
@@ -118,6 +133,18 @@ static void apply_touch(uint32_t now) {
   if (outcome.accepted) {
     if (outcome.notice != 0 && strcmp(outcome.notice, "Adotou") == 0) {
       g_pet.last_tick_ms = now;
+      g_action_until_ms = 0;
+    } else if (outcome.notice != 0 &&
+               (strcmp(outcome.notice, "Comeu") == 0 || strcmp(outcome.notice, "Brincou") == 0 ||
+                strcmp(outcome.notice, "Banhou") == 0)) {
+      if (strcmp(outcome.notice, "Comeu") == 0) {
+        g_action = CARE_FEED;
+      } else if (strcmp(outcome.notice, "Brincou") == 0) {
+        g_action = CARE_PLAY;
+      } else {
+        g_action = CARE_BATHE;
+      }
+      g_action_until_ms = now + kMoodActionMs;
     }
     if (!pet_commit(g_store, g_pet)) {
       Serial.println("zumi gravacao falhou");
@@ -146,6 +173,12 @@ void loop() {
   const uint32_t now = millis();
   apply_touch(now);
   if (g_notice_drawn && care_notice_text(g_notice, now) == 0) {
+    show_pet();
+  }
+
+  const MoodId mood = mood_choose(g_pet, g_action, now < g_action_until_ms);
+  const int frame_i = mood_frame_index(mood, now);
+  if (frame_i != g_last_mood_frame) {
     show_pet();
   }
 
