@@ -67,7 +67,13 @@ const char* kCareAwake[4] = {"Comer", "Brincar", "Dormir", "Banho"};
 
 ZumiFrame zumi_frame(const PetSnapshot& pet) {
   ZumiFrame frame;
-  frame.pose = zumi_pose(pet.phase, pet.asleep);
+  frame.pose = pet.on_street ? POSE_NONE : zumi_pose(pet.phase, pet.asleep);
+  frame.status = 0;
+  if (pet.on_street) {
+    frame.status = "Voltou pra rua";
+  } else if (pet.sick) {
+    frame.status = "Doente";
+  }
 
   const SpriteView sprite = sprite_view(frame.pose);
   frame.dog_w = sprite.width * kZumiSpriteScale;
@@ -83,6 +89,32 @@ ZumiFrame zumi_frame(const PetSnapshot& pet) {
 
   const uint8_t values[4] = {pet.bars.hunger, pet.bars.energy, pet.bars.fun, pet.bars.hygiene};
   for (int i = 0; i < 4; ++i) {
+    frame.bars[i].name = kBarNames[i];
+    frame.bars[i].value = values[i];
+    frame.bars[i].fill_px = bar_fill_px(values[i]);
+    frame.bars[i].x = 0;
+    frame.bars[i].y = 0;
+    frame.targets[i].action = TOUCH_NONE;
+    frame.targets[i].label = "";
+    frame.targets[i].x = 0;
+    frame.targets[i].y = 0;
+    frame.targets[i].w = 0;
+    frame.targets[i].h = 0;
+  }
+
+  if (pet.on_street) {
+    frame.target_count = 1;
+    frame.targets[0].action = TOUCH_ADOPT;
+    frame.targets[0].label = "Adotar";
+    frame.targets[0].x = 40;
+    frame.targets[0].y = kZumiDockY;
+    frame.targets[0].w = 240;
+    frame.targets[0].h = kZumiDockH;
+    return frame;
+  }
+
+  frame.target_count = 4;
+  for (int i = 0; i < 4; ++i) {
     frame.targets[i].action = kCareActions[i];
     frame.targets[i].label = (pet.asleep && kCareActions[i] == TOUCH_SLEEP) ? "Acordar" : kCareAwake[i];
     frame.targets[i].x = kZumiDockX + i * (kZumiDockW + kZumiDockGap);
@@ -90,9 +122,6 @@ ZumiFrame zumi_frame(const PetSnapshot& pet) {
     frame.targets[i].w = kZumiDockW;
     frame.targets[i].h = kZumiDockH;
 
-    frame.bars[i].name = kBarNames[i];
-    frame.bars[i].value = values[i];
-    frame.bars[i].fill_px = bar_fill_px(values[i]);
     frame.bars[i].x = frame.targets[i].x + (kZumiDockW - kZumiBarTrackPx) / 2;
     frame.bars[i].y = frame.targets[i].y + 36;
   }

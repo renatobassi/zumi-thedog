@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Status | `em crítica` |
-| Versão | 0.1 |
+| Status | `aprovado` |
+| Versão | 0.2 |
 | Autor | Produto |
-| Última edição | 2026-09-25 |
+| Última edição | 2026-10-20 |
 
 ## 1. Propósito e escopo
 
@@ -75,9 +75,9 @@ Caminho de falha: na rua, Comer, Brincar, Dormir e Banho não fazem nada. O úni
 
 ## 10. Critérios de liberação
 
-- [ ] Os casos de uso da seção 5 passam.
-- [ ] O KPI da seção 8 foi observado do jeito descrito.
-- [ ] Product SEO está `não se aplica`.
+- [x] Os casos de uso da seção 5 passam no teste nativo. Adeus e Adotar no mapa da tela.
+- [x] O KPI da seção 8 foi observado do jeito descrito no computador. Leitura na mesa continua aberta.
+- [x] Product SEO está `não se aplica`.
 
 ## 11. Product SEO
 
@@ -105,6 +105,8 @@ O corte menor é a proposta.
 
 Decisão: `seguir`.
 
+`aprovado` em 2026-10-20. Crítica aceita com `seguir`. Casos 1 a 6 no teste nativo. Registro v3. Sprite de doente fica para o humor.
+
 ## 14. Fora desta entrega
 
 Sprite de doente, som de choro, aviso no celular, mais de um Zumi, rua por higiene ou diversão.
@@ -114,3 +116,4 @@ Sprite de doente, som de choro, aviso no celular, mais de um Zumi, rua por higie
 | Versão | O que mudou |
 |---|---|
 | 0.1 | Doença por fome ou energia e rua em 24 horas ligadas. |
+| 0.2 | Crítica aceita com `seguir`. Casos 1 a 6 no teste nativo. |

@@ -38,7 +38,8 @@ enum TouchAction {
   TOUCH_FEED = 1,
   TOUCH_PLAY = 2,
   TOUCH_SLEEP = 3,
-  TOUCH_BATH = 4
+  TOUCH_BATH = 4,
+  TOUCH_ADOPT = 5
 };
 
 struct CareTarget {
@@ -61,6 +62,8 @@ struct ZumiFrame {
   BarView bars[4];
   int notice_x;
   int notice_y;
+  const char* status;
+  int target_count;
   CareTarget targets[4];
 };
 

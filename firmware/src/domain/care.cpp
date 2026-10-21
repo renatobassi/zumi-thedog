@@ -1,6 +1,7 @@
 #include "care.hpp"
 
 #include "growth.hpp"
+#include "health.hpp"
 
 namespace {
 
@@ -90,6 +91,13 @@ void advance_bars(PetSnapshot& pet, uint32_t elapsed_ms) {
 }  // namespace
 
 bool care_apply(PetSnapshot& pet, CareAction action) {
+  if (action == CARE_ADOPT) {
+    return health_adopt(pet, pet.last_tick_ms);
+  }
+  if (pet.on_street) {
+    return false;
+  }
+
   switch (action) {
   case CARE_FEED:
     if (pet.asleep) {
@@ -98,7 +106,7 @@ bool care_apply(PetSnapshot& pet, CareAction action) {
     pet.bars.hunger = static_cast<uint8_t>(clamp_bar(pet.bars.hunger + kFeedHunger));
     return true;
   case CARE_PLAY:
-    if (pet.asleep || pet.bars.energy < kPlayMinEnergy) {
+    if (pet.asleep || pet.sick || pet.bars.energy < kPlayMinEnergy) {
       return false;
     }
     pet.bars.fun = static_cast<uint8_t>(clamp_bar(pet.bars.fun + kPlayFun));
@@ -123,11 +131,17 @@ bool care_apply(PetSnapshot& pet, CareAction action) {
     }
     pet.asleep = false;
     return true;
+  case CARE_ADOPT:
+    break;
   }
   return false;
 }
 
 void care_advance(PetSnapshot& pet, uint32_t elapsed_ms) {
+  if (pet.on_street) {
+    return;
+  }
   growth_advance(pet, elapsed_ms);
   advance_bars(pet, elapsed_ms);
+  health_advance(pet, elapsed_ms);
 }
